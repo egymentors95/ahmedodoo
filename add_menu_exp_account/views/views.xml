@@ -7,30 +7,43 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="submit_to_manager" string="Submit To Manager"
+
+                        <button name="to_direct_manager" string="To Direct Manager"
                                 class="oe_highlight"
                                 type="object"
-                                invisible="state != 'draft'"/>
-                        <button name="submit_to_financial_manager" string="Submit to Financial Manager"
+                                invisible="state != 'draft'"
+                                groups="add_menu_exp_account.group_creator"/>
+                        <button name="to_account1" string="To Account 1"
                                 class="oe_highlight"
                                 type="object"
-                                invisible="state != 'to_manager'"/>
-                        <button name="submit_to_account" string="Submit to Account"
+                                invisible="state != 'direct_manager'"
+                                groups="add_menu_exp_account.group_direct_manager"/>
+
+                        <button name="to_account_manager" string="To Account Manager"
                                 class="oe_highlight"
                                 type="object"
-                                invisible="state != 'to_financial_manager'"/>
-                        <button name="get_confirm" string="Post Entry"
+                                invisible="state != 'account1'"
+                                groups="add_menu_exp_account.group_account1"/>
+
+                        <button name="to_financial_manager" string="To Financial Manager"
                                 class="oe_highlight"
                                 type="object"
-                                invisible="state != 'to_account'"/>
-                        <button name="refuse_to_draft" string="Refuse"
+                                invisible="state != 'account_manager'"
+                                groups="add_menu_exp_account.group_account_manager"/>
+
+                        <button name="to_cash_management" string="To Cash Management"
+                                class="oe_highlight"
                                 type="object"
-                                class="btn btn-secondary"
-                                invisible="state != 'to_manager'"/>
-                        <button name="refuse_to_manager" string="Refuse"
+                                invisible="state != 'financial_manager'"
+                                groups="add_menu_exp_account.group_financial_manager"/>
+
+                        <button name="to_account2" string="To Account 2"
+                                class="oe_highlight"
                                 type="object"
-                                class="btn btn-secondary"
-                                invisible="state != 'to_financial_manager'"/>
+                                invisible="state != 'cash_management'"
+                                groups="add_menu_exp_account.group_cash_management"/>
+
+
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
@@ -63,6 +76,7 @@
                                         <field name="product_ids" options="{'no_create': True}"/>
                                         <field name="name" optional="show"/>
                                         <field name="account_id" optional="show"/>
+                                        <field name="vendor_id" optional="show"/>
                                         <field name="attachment_ids" widget="many2many_binary" optional="show"/>
                                         <field name="quantity" optional="show"/>
                                         <field name="price_unit" optional="show"/>
@@ -106,7 +120,6 @@
         </record>
 
 
-
         <record id="Expense_view_action" model="ir.actions.act_window">
             <field name="name">Expenses</field>
             <field name="type">ir.actions.act_window</field>
@@ -121,7 +134,8 @@
 
 
         <!--        <menuitem id="Expense_view_menu_ID_categ" name="Expenses" parent="account.menu_finance" sequence="34"/>-->
-        <menuitem id="Expense_view_menu_ID_categ" name="Expenses"/>
+        <menuitem id="Expense_view_menu_ID_categ" name="Expenses"
+                  web_icon="add_menu_exp_account,static/description/icon.png"/>
         <menuitem id="Expense_view_menu" name="Expenses" parent="add_menu_exp_account.Expense_view_menu_ID_categ"
                   action="Expense_view_action" sequence="2"/>
 

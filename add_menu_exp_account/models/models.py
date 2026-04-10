@@ -2,14 +2,13 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
-from odoo.osv import expression
 from datetime import date
 
 
-@api.depends('restrict_mode_hash_table', 'state')
-def _compute_show_reset_to_draft_button(self):
-    for move in self:
-        move.show_reset_to_draft_button = not move.restrict_mode_hash_table and move.state in ('posted', 'cancel')
+# @api.depends('restrict_mode_hash_table', 'state')
+# def _compute_show_reset_to_draft_button(self):
+#     for move in self:
+#         move.show_reset_to_draft_button = not move.restrict_mode_hash_table and move.state in ('posted', 'cancel')
 
 
 class Expense(models.Model):
@@ -30,11 +29,14 @@ class Expense(models.Model):
     tax = fields.Float(string="Taxes", compute="_get_tax", tracking=True, store=True)
     state = fields.Selection(selection=
     [
-        ('draft', 'Draft'),
-        ('to_manager', 'To Manager'),
-        ('to_financial_manager', 'To Financial Manager'),
-        ('to_account', 'To Account'),
-        ('confirm', 'Posted'),
+        ('draft', 'creator'),
+        ('direct_manager', 'Direct Manager'),
+        ('account1', 'Accounts 1'),
+        ('account_manager', 'Account Manager'),
+        ('financial_manager', 'Financial Manager'),
+        ('cash_management', 'Cash Management'),
+        ('account2', 'Accounts 2'),
+
     ], required=False, default='draft', tracking=True)
     amount_taxed = fields.Float(string="Un Taxed Amount", tracking=True)
     seq = fields.Char(readonly=True, copy=False, )
@@ -54,15 +56,11 @@ class Expense(models.Model):
         error_message = _('You cannot delete a expense which is in %s state')
         state_description_values = {elem[0]: elem[1] for elem in self._fields['state']._description_selection(self.env)}
 
-        if self.user_has_groups('base.group_user'):
+        if self.env.user.has_group('base.group_user'):
             if any(hol.state not in ['draft'] for hol in self):
                 raise UserError(error_message % state_description_values.get(self[:1].state))
         return super(Expense, self).unlink()
 
-    # def action_draft(self):
-    #     for rec in self:
-    #         rec.state = 'draft'
-    #         rec.journal_entry_id.button_draft()
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -75,83 +73,87 @@ class Expense(models.Model):
         records = super().create(vals_list)
         return records
 
-    def submit_to_manager(self):
+    def to_direct_manager(self):
         for rec in self:
-            rec.state = 'to_manager'
+            rec.state = 'direct_manager'
 
-    def submit_to_financial_manager(self):
+    def to_account1(self):
         for rec in self:
-            rec.state = 'to_financial_manager'
+            rec.state = 'account1'
 
-    def submit_to_account(self):
+    def to_account_manager(self):
         for rec in self:
-            rec.state = 'to_account'
+            rec.state = 'account_manager'
 
-    def refuse_to_draft(self):
+    def to_financial_manager(self):
         for rec in self:
-            rec.state = 'draft'
+            rec.state = 'financial_manager'
 
-    def refuse_to_manager(self):
+    def to_cash_management(self):
         for rec in self:
-            rec.state = 'to_manager'
+            rec.state = 'cash_management'
 
-    def get_confirm(self):
+    def to_account2(self):
         for rec in self:
-            if not rec.journal_id:
-                raise UserError(
-                    _("You cannot Post Entry. Please fill Journal."))
+            rec.state = 'account2'
 
-            for line in rec.expenses_ids:
-                if not line.account_id:
-                    raise UserError(
-                        _("You cannot Post Entry because some expense lines have no Account. Please fill all Accounts."))
-
-            lines = []
-            taxx = 0
-            for line in rec.expenses_ids:
-                for tax in line.tax_ids.invoice_repartition_line_ids:
-                    if tax.account_id:
-                        taxx = tax.account_id.id
-                lines.append([0, 0, {
-                    'account_id': line.account_id.id,
-                    'name': f"{line.product_ids.name} - {line.name}",
-                    'debit': line.price_subtotal,
-
-                }])
-            if taxx:
-                lines.append([0, 0, {
-                    'account_id': taxx,
-                    'name': f'Tax',
-                    'debit': rec.tax,
-
-                }])
-            lines.append([0, 0, {
-                'account_id': rec.journal_id.default_account_id.id,
-                'name': f"{line.product_ids.name} - {line.name}",
-                'credit': rec.total,
-
-            }])
-
-            if rec.journal_entry_id.is_created == False:
-                invoice = self.env['account.move'].sudo().create({
-                    'is_created': True,
-                    'move_type': 'entry',
-                    'ref': rec.seq,
-                    'date': rec.expense_date,
-                    'journal_id': rec.journal_id.id,
-                    'line_ids': lines,
-                })
-                rec.journal_entry_id = invoice.id
-                invoice.action_post()
-
-            else:
-                rec.journal_entry_id.date = rec.expense_date
-                rec.journal_entry_id.journal_id = rec.journal_id
-                rec.journal_entry_id.ref = rec.name
-                rec.journal_entry_id.line_ids = False
-                rec.journal_entry_id.line_ids = lines
-                rec.journal_entry_id.action_post()
-            rec.state = 'confirm'
+    # def get_confirm(self):
+    #     for rec in self:
+    #         if not rec.journal_id:
+    #             raise UserError(
+    #                 _("You cannot Post Entry. Please fill Journal."))
+    #
+    #         for line in rec.expenses_ids:
+    #             if not line.account_id:
+    #                 raise UserError(
+    #                     _("You cannot Post Entry because some expense lines have no Account. Please fill all Accounts."))
+    #
+    #         lines = []
+    #         taxx = 0
+    #         for line in rec.expenses_ids:
+    #             for tax in line.tax_ids.invoice_repartition_line_ids:
+    #                 if tax.account_id:
+    #                     taxx = tax.account_id.id
+    #             lines.append([0, 0, {
+    #                 'account_id': line.account_id.id,
+    #                 'name': f"{line.product_ids.name} - {line.name}",
+    #                 'debit': line.price_subtotal,
+    #
+    #             }])
+    #         if taxx:
+    #             lines.append([0, 0, {
+    #                 'account_id': taxx,
+    #                 'name': f'Tax',
+    #                 'debit': rec.tax,
+    #
+    #             }])
+    #         lines.append([0, 0, {
+    #             'account_id': rec.journal_id.default_account_id.id,
+    #             'name': f"{line.product_ids.name} - {line.name}",
+    #             'credit': rec.total,
+    #
+    #         }])
+    #
+    #         if rec.journal_entry_id.is_created == False:
+    #             invoice = self.env['account.move'].sudo().create({
+    #                 'is_created': True,
+    #                 'move_type': 'entry',
+    #                 'ref': rec.seq,
+    #                 'date': rec.expense_date,
+    #                 'journal_id': rec.journal_id.id,
+    #                 'line_ids': lines,
+    #             })
+    #             rec.journal_entry_id = invoice.id
+    #             invoice.action_post()
+    #
+    #         else:
+    #             rec.journal_entry_id.date = rec.expense_date
+    #             rec.journal_entry_id.journal_id = rec.journal_id
+    #             rec.journal_entry_id.ref = rec.name
+    #             rec.journal_entry_id.line_ids = False
+    #             rec.journal_entry_id.line_ids = lines
+    #             rec.journal_entry_id.action_post()
+    #         rec.state = 'confirm'
 
     @api.depends(
         'expenses_ids.quantity',
@@ -193,6 +195,7 @@ class ExpenseLine(models.Model):
     name = fields.Char(string="Label", )
     account_id = fields.Many2one(comodel_name="account.account", string="Account", required=False,
                                  readonly=False, )
+    vendor_id = fields.Many2one(comodel_name='res.partner', string='Vendors', domain=[('supplier_rank', '>', 0)])
     quantity = fields.Float(string="Quantity", required=False, default="1")
     price_unit = fields.Float(string="Price", required=True, )
     tax_ids = fields.Many2many(comodel_name="account.tax", string="Taxes", )
@@ -223,19 +226,7 @@ class ExpenseLine(models.Model):
                 rec.tax_ids = False
 
 
-# class PartnerExpenses(models.Model):
-#     _inherit = 'res.partner'
-#
-#     is_expenses = fields.Boolean()
-#
-#
-# class AccountJournalExpenses(models.Model):
-#     _inherit = 'account.journal'
-#
-#     expenses_filtration = fields.Boolean(string="Expenses Filtration")
-#     for_expenses = fields.Boolean(string="For Expenses")
-#
-#
+
 class AccountMoveExpenses(models.Model):
     _inherit = 'account.move'
 
