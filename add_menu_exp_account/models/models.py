@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import UserError
 from datetime import date
 
 
@@ -18,11 +18,11 @@ class Expense(models.Model):
     _rec_name = 'seq'
 
     name = fields.Text(string="Ref", required=False, )
-    journal_entry_id = fields.Many2one(comodel_name="account.move", string="Journal Entry", copy=False)
+    # journal_entry_id = fields.Many2one(comodel_name="account.move", string="Journal Entry", copy=False)
     expense_date = fields.Date(string="Expense Date", required=True, copy=False, tracking=True,
                                default=lambda self: date.today())
-    journal_id = fields.Many2one(comodel_name="account.journal", string="Journal", required=False, tracking=True,
-                                 domain="[('type', 'in', ['bank','cash'])]")
+    # journal_id = fields.Many2one(comodel_name="account.journal", string="Journal", required=False, tracking=True,
+    #                              domain="[('type', 'in', ['bank','cash'])]")
     expenses_ids = fields.One2many(comodel_name="expense.line", inverse_name="invoice_id", string="Expenses",
                                    tracking=True)
     total = fields.Float(string="Total", tracking=True)
@@ -41,8 +41,42 @@ class Expense(models.Model):
     amount_taxed = fields.Float(string="Un Taxed Amount", tracking=True)
     seq = fields.Char(readonly=True, copy=False, )
     company_id = fields.Many2one(comodel_name='res.company', string='Company', default=lambda self: self.env.company)
-    user_id = fields.Many2one(comodel_name='res.users', string='User', default=lambda self: self.env.user, copy=False)
     department_id = fields.Many2one(comodel_name='user.department', compute='_get_department', store=True)
+    #========================== Users =============================
+    user_id = fields.Many2one(comodel_name='res.users', string='User', default=lambda self: self.env.user, copy=False)
+    direct_manager = fields.Many2one(comodel_name='res.users', string='Direct Manager')
+    account1 = fields.Many2one(comodel_name='res.users', string='Accounts 1')
+    account_manager = fields.Many2one(comodel_name='res.users', string='Account Manager')
+    financial_manager = fields.Many2one(comodel_name='res.users', string='Financial Manager')
+    cash_management = fields.Many2one(comodel_name='res.users', string='Cash Management')
+    account2 = fields.Many2one(comodel_name='res.users', string='Accounts 2')
+
+    def write(self, vals):
+        if 'state' in vals:
+            for rec in self:
+                user = self.env.user
+
+                allowed = False
+
+                if rec.state == 'draft' and rec.user_id == user:
+                    allowed = True
+                elif rec.state == 'direct_manager' and rec.direct_manager == user:
+                    allowed = True
+                elif rec.state == 'account1' and rec.account1 == user:
+                    allowed = True
+                elif rec.state == 'account_manager' and rec.account_manager == user:
+                    allowed = True
+                elif rec.state == 'financial_manager' and rec.financial_manager == user:
+                    allowed = True
+                elif rec.state == 'cash_management' and rec.cash_management == user:
+                    allowed = True
+                elif rec.state == 'account2' and rec.account2 == user:
+                    allowed = True
+
+                if not allowed:
+                    raise UserError("You are not allowed to change this state.")
+
+        return super().write(vals)
 
     @api.depends('user_id')
     def _get_department(self):
