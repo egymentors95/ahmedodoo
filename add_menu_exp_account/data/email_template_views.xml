@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+
+          <record id="email_template_expense_stage" model="mail.template">
+            <field name="name">Expense Stage Notification</field>
+            <field name="model_id" ref="model_expense_expense"/>
+
+            <field name="subject">
+                Expense {{ object.seq }} requires your action
+            </field>
+
+            <field name="email_to">
+                {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}
+            </field>
+
+            <field name="body_html" type="html">
+                <div>
+                    <p>
+                        Hello
+                        <t t-out="object._get_user_by_state().name if object._get_user_by_state() else ''"/>,
+                    </p>
+
+                    <p>
+                        Expense <strong t-out="object.seq"/> is waiting for your approval.
+                    </p>
+
+                    <p>Please review it in the system.</p>
+                </div>
+            </field>
+
+        </record>
+
+    </data>
+</odoo>

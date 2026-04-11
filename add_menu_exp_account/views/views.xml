@@ -86,6 +86,16 @@
                                         <field name="price_subtotal" optional="show"/>
                                     </list>
                                 </field>
+                                <group>
+                                    <group>
+
+                                    </group>
+                                    <group class="oe_subtotal_footer oe_right" colspan="2">
+                                        <field name="amount_taxed" widget="monetary" readonly="1"/>
+                                        <field name="tax" widget="monetary" readonly="1"/>
+                                        <field name="total" widget="monetary" readonly="1"/>
+                                    </group>
+                                </group>
                             </page>
                             <page string="Assign to Users">
                                 <group>
@@ -99,23 +109,19 @@
                                                required="state == 'account1'" readonly="state != 'account1'"/>
                                     </group>
                                     <group>
-                                        <field name="financial_manager" options="{'no_create': True}" required="state == 'account_manager'" readonly="state != 'account_manager'"/>
-                                        <field name="cash_management" options="{'no_create': True}" required="state == 'financial_manager'" readonly="state != 'financial_manager'"/>
-                                        <field name="account2" options="{'no_create': True}" required="state == 'cash_management'" readonly="state != 'cash_management'"/>
+                                        <field name="financial_manager" options="{'no_create': True}"
+                                               required="state == 'account_manager'"
+                                               readonly="state != 'account_manager'"/>
+                                        <field name="cash_management" options="{'no_create': True}"
+                                               required="state == 'financial_manager'"
+                                               readonly="state != 'financial_manager'"/>
+                                        <field name="account2" options="{'no_create': True}"
+                                               required="state == 'cash_management'"
+                                               readonly="state != 'cash_management'"/>
                                     </group>
                                 </group>
                             </page>
                         </notebook>
-                        <group>
-                            <group>
-
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2">
-                                <field name="amount_taxed" widget="monetary" readonly="1"/>
-                                <field name="tax" widget="monetary" readonly="1"/>
-                                <field name="total" widget="monetary" readonly="1"/>
-                            </group>
-                        </group>
 
                     </sheet>
                     <chatter/>

@@ -30,6 +30,7 @@
         'views/product_product_views.xml',
         'views/expense_line_views.xml',
         'views/res_users_views.xml',
+        'data/email_template_views.xml',
     ],
 
 }

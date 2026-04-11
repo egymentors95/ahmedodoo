@@ -42,7 +42,7 @@ class Expense(models.Model):
     seq = fields.Char(readonly=True, copy=False, )
     company_id = fields.Many2one(comodel_name='res.company', string='Company', default=lambda self: self.env.company)
     department_id = fields.Many2one(comodel_name='user.department', compute='_get_department', store=True)
-    #========================== Users =============================
+    # ========================== Users =============================
     user_id = fields.Many2one(comodel_name='res.users', string='User', default=lambda self: self.env.user, copy=False)
     direct_manager = fields.Many2one(comodel_name='res.users', string='Direct Manager')
     account1 = fields.Many2one(comodel_name='res.users', string='Accounts 1')
@@ -84,7 +84,43 @@ class Expense(models.Model):
             if rec.user_id and rec.user_id.department_id:
                 rec.department_id = rec.user_id.department_id.id
 
+    # =========================================
+    # 🔥 تحديد اليوزر حسب المرحلة
+    # =========================================
 
+    def _get_user_by_state(self):
+        self.ensure_one()
+        return {
+            'direct_manager': self.direct_manager,
+            'account1': self.account1,
+            'account_manager': self.account_manager,
+            'financial_manager': self.financial_manager,
+            'cash_management': self.cash_management,
+            'account2': self.account2,
+        }.get(self.state)
+
+    # =========================================
+    # 🔥 إرسال الإيميل
+    # =========================================
+
+    def _send_stage_email(self):
+        template = self.env.ref('add_menu_exp_account.email_template_expense_stage')
+
+        for rec in self:
+            user = rec._get_user_by_state()
+
+            if user and user.email:
+                template.send_mail(
+                    rec.id,
+                    email_values={'email_to': user.email},
+                    force_send=True
+                )
+                # ✅ Optional: إضافة Activity
+                rec.activity_schedule(
+                    'mail.mail_activity_data_todo',
+                    user_id=user.id,
+                    summary="Expense Approval Required",
+                )
 
     def unlink(self):
         error_message = _('You cannot delete a expense which is in %s state')
@@ -94,7 +130,6 @@ class Expense(models.Model):
             if any(hol.state not in ['draft'] for hol in self):
                 raise UserError(error_message % state_description_values.get(self[:1].state))
         return super(Expense, self).unlink()
-
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -110,26 +145,32 @@ class Expense(models.Model):
     def to_direct_manager(self):
         for rec in self:
             rec.state = 'direct_manager'
+            rec._send_stage_email()
 
     def to_account1(self):
         for rec in self:
             rec.state = 'account1'
+            rec._send_stage_email()
 
     def to_account_manager(self):
         for rec in self:
             rec.state = 'account_manager'
+            rec._send_stage_email()
 
     def to_financial_manager(self):
         for rec in self:
             rec.state = 'financial_manager'
+            rec._send_stage_email()
 
     def to_cash_management(self):
         for rec in self:
             rec.state = 'cash_management'
+            rec._send_stage_email()
 
     def to_account2(self):
         for rec in self:
             rec.state = 'account2'
+            rec._send_stage_email()
 
     # def get_confirm(self):
     #     for rec in self:
@@ -237,7 +278,6 @@ class ExpenseLine(models.Model):
     vat_value = fields.Float(string='Vat Value', compute='_get_total_vat', store=True)
     attachment_ids = fields.Many2many(comodel_name='ir.attachment', string='Attachments', )
 
-
     @api.depends('price_subtotal', 'tax_ids')
     def _get_total_vat(self):
         for rec in self:
@@ -246,7 +286,6 @@ class ExpenseLine(models.Model):
                 t = t + any_line.amount
             taxes = (t / 100) * rec.price_subtotal
             rec.vat_value = taxes
-
 
     @api.onchange('product_ids')
     def _onchange_product_ids(self):
@@ -260,10 +299,8 @@ class ExpenseLine(models.Model):
                 rec.tax_ids = False
 
 
-
 class AccountMoveExpenses(models.Model):
     _inherit = 'account.move'
 
     is_expenses = fields.Boolean()
     is_created = fields.Boolean(string="", default=False)
-
