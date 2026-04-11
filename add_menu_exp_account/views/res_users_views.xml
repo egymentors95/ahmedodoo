@@ -17,6 +17,14 @@
                         <group></group>
                     </group>
                 </page>
+                <page string="Manager">
+                    <group>
+                        <group>
+                            <field name="manager_id"/>
+                        </group>
+                        <group></group>
+                    </group>
+                </page>
             </xpath>
 
         </field>

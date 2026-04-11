@@ -44,12 +44,52 @@ class Expense(models.Model):
     department_id = fields.Many2one(comodel_name='user.department', compute='_get_department', store=True)
     # ========================== Users =============================
     user_id = fields.Many2one(comodel_name='res.users', string='User', default=lambda self: self.env.user, copy=False)
-    direct_manager = fields.Many2one(comodel_name='res.users', string='Direct Manager')
-    account1 = fields.Many2one(comodel_name='res.users', string='Accounts 1')
-    account_manager = fields.Many2one(comodel_name='res.users', string='Account Manager')
-    financial_manager = fields.Many2one(comodel_name='res.users', string='Financial Manager')
-    cash_management = fields.Many2one(comodel_name='res.users', string='Cash Management')
-    account2 = fields.Many2one(comodel_name='res.users', string='Accounts 2')
+    direct_manager = fields.Many2one(comodel_name='res.users', string='Direct Manager', compute='_get_manager', store=True)
+    account1 = fields.Many2one(comodel_name='res.users', string='Accounts 1', compute='_get_account1', store=True)
+    account_manager = fields.Many2one(comodel_name='res.users', string='Account Manager', compute='_get_account_manager', store=True)
+    financial_manager = fields.Many2one(comodel_name='res.users', string='Financial Manager', compute='_get_financial_manager', store=True)
+    cash_management = fields.Many2one(comodel_name='res.users', string='Cash Management', compute='_get_cash_management', store=True)
+    account2 = fields.Many2one(comodel_name='res.users', string='Accounts 2', compute='_get_account2', store=True)
+
+    @api.depends('user_id')
+    def _get_manager(self):
+        for rec in self:
+            if rec.user_id:
+                rec.direct_manager = rec.user_id.manager_id.id
+
+    @api.depends('direct_manager')
+    def _get_account1(self):
+        for rec in self:
+            if rec.direct_manager:
+                rec.account1 = rec.direct_manager.manager_id.id
+
+    @api.depends('account1')
+    def _get_account_manager(self):
+        for rec in self:
+            if rec.account1:
+                rec.account_manager = rec.account1.manager_id.id
+
+    @api.depends('account_manager')
+    def _get_financial_manager(self):
+        for rec in self:
+            if rec.account_manager:
+                rec.financial_manager = rec.account_manager.manager_id.id
+
+    @api.depends('financial_manager')
+    def _get_cash_management(self):
+        for rec in self:
+            if rec.financial_manager:
+                rec.cash_management = rec.financial_manager.manager_id.id
+
+    @api.depends('cash_management')
+    def _get_account2(self):
+        for rec in self:
+            if rec.cash_management:
+                rec.account2 = rec.cash_management.manager_id.id
+
+
+
+
 
     def write(self, vals):
         if 'state' in vals:

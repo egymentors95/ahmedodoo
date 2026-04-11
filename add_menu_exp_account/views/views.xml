@@ -97,27 +97,17 @@
                                     </group>
                                 </group>
                             </page>
-                            <page string="Assign to Users">
+                            <page string="Assign to Users" invisible="1">
                                 <group>
                                     <group>
-                                        <field name="direct_manager" options="{'no_create': True}"
-                                               required="state == 'draft'" readonly="state != 'draft'"/>
-                                        <field name="account1" options="{'no_create': True}"
-                                               required="state == 'direct_manager'"
-                                               readonly="state != 'direct_manager'"/>
-                                        <field name="account_manager" options="{'no_create': True}"
-                                               required="state == 'account1'" readonly="state != 'account1'"/>
+                                        <field name="direct_manager" options="{'no_create': True}"/>
+                                        <field name="account1" options="{'no_create': True}"/>
+                                        <field name="account_manager" options="{'no_create': True}"/>
                                     </group>
                                     <group>
-                                        <field name="financial_manager" options="{'no_create': True}"
-                                               required="state == 'account_manager'"
-                                               readonly="state != 'account_manager'"/>
-                                        <field name="cash_management" options="{'no_create': True}"
-                                               required="state == 'financial_manager'"
-                                               readonly="state != 'financial_manager'"/>
-                                        <field name="account2" options="{'no_create': True}"
-                                               required="state == 'cash_management'"
-                                               readonly="state != 'cash_management'"/>
+                                        <field name="financial_manager" options="{'no_create': True}"/>
+                                        <field name="cash_management" options="{'no_create': True}"/>
+                                        <field name="account2" options="{'no_create': True}"/>
                                     </group>
                                 </group>
                             </page>
