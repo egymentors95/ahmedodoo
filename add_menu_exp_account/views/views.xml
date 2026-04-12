@@ -95,7 +95,7 @@
                                 <!--                                       readonly="state == 'confirm'"/>-->
                                 <!--                                <field name="journal_entry_id" readonly="1"-->
                                 <!--                                />-->
-                                <field name="company_id" readonly="1"/>
+                                <field name="company_id" options="{'no_create': True, 'no_open': True}" readonly="1"/>
                             </group>
                         </group>
 
