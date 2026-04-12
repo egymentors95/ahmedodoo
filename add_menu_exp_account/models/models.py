@@ -408,6 +408,8 @@ class ExpenseLine(models.Model):
             else:
                 rec.tax_ids = False
 
+    
+
 
 class AccountMoveExpenses(models.Model):
     _inherit = 'account.move'
