@@ -42,11 +42,37 @@
                                 type="object"
                                 invisible="state != 'cash_management'"
                                 groups="add_menu_exp_account.group_cash_management"/>
-                        <button name="refuse" string="Refuse"
+<!--                             Refuse                                -->
+                        <button name="refuse_direct_manager" string="Refuse"
                                 class="btn-danger"
                                 type="object"
-                                invisible="state == 'draft'"
-                                />
+                                invisible="state != 'direct_manager'"
+                                groups="add_menu_exp_account.group_direct_manager"/>
+                        <button name="refuse_account1" string="Refuse"
+                                class="btn-danger"
+                                type="object"
+                                invisible="state != 'account1'"
+                                groups="add_menu_exp_account.group_account1"/>
+                         <button name="refuse_account_manager" string="Refuse"
+                                class="btn-danger"
+                                type="object"
+                                invisible="state != 'account_manager'"
+                                groups="add_menu_exp_account.group_account_manager"/>
+                         <button name="refuse_financial_manager" string="Refuse"
+                                class="btn-danger"
+                                type="object"
+                                invisible="state != 'financial_manager'"
+                                groups="add_menu_exp_account.group_financial_manager"/>
+                         <button name="refuse_cash_management" string="Refuse"
+                                class="btn-danger"
+                                type="object"
+                                invisible="state != 'cash_management'"
+                                groups="add_menu_exp_account.group_cash_management"/>
+                         <button name="refuse_account2" string="Refuse"
+                                class="btn-danger"
+                                type="object"
+                                invisible="state != 'account2'"
+                                groups="add_menu_exp_account.group_account2"/>
 
 
                         <field name="state" widget="statusbar"/>
@@ -80,7 +106,6 @@
                                     <list editable="bottom">
                                         <field name="product_ids" options="{'no_create': True}"/>
                                         <field name="name" optional="show"/>
-                                        <field name="account_id" optional="show"/>
                                         <field name="vendor_id" optional="show"/>
                                         <field name="attachment_ids" widget="many2many_binary" optional="show"
                                                readonly="parent.state not in ['draft', 'financial_manager']"/>

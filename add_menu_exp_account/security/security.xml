@@ -113,41 +113,49 @@
             <field name="sequence">150</field>
             <field name="category_id" ref="add_menu_exp_account.module_category_expense"/>
         </record>
+        <record id="expense_privilege_account2" model="res.groups.privilege">
+            <field name="name">Account 2</field>
+            <field name="sequence">160</field>
+            <field name="category_id" ref="add_menu_exp_account.module_category_expense"/>
+        </record>
         <!--_____________groups for buttons_______________________________    &ndash;&gt;-->
         <record id="group_creator" model="res.groups">
-            <field name="name">Creator</field>
+            <field name="name">User</field>
             <field name="privilege_id" ref="expense_privilege_creator"/>
         </record>
 
         <record id="group_direct_manager" model="res.groups">
-            <field name="name">Direct Manager</field>
+            <field name="name">User</field>
             <field name="privilege_id" ref="expense_privilege_direct_manager"/>
 
         </record>
 
         <record id="group_account1" model="res.groups">
-            <field name="name">Account 1</field>
+            <field name="name">User</field>
             <field name="privilege_id" ref="expense_privilege_account1"/>
 
         </record>
 
         <record id="group_account_manager" model="res.groups">
-            <field name="name">Account Manager</field>
+            <field name="name">User</field>
             <field name="privilege_id" ref="expense_privilege_account_manager"/>
 
         </record>
 
         <record id="group_financial_manager" model="res.groups">
-            <field name="name">Financial Manager</field>
+            <field name="name">User</field>
             <field name="privilege_id" ref="expense_privilege_financial_manager"/>
         </record>
 
         <record id="group_cash_management" model="res.groups">
-            <field name="name">Cash Management</field>
+            <field name="name">User</field>
             <field name="privilege_id" ref="expense_privilege_cash_management"/>
-
         </record>
 
+        <record id="group_account2" model="res.groups">
+            <field name="name">User</field>
+            <field name="privilege_id" ref="expense_privilege_account2"/>
+        </record>
 
 
     </data>

@@ -242,24 +242,44 @@ class Expense(models.Model):
             rec.state = 'account2'
             rec._send_stage_email()
 
-    def refuse(self):
+    # Refuse
+    def refuse_direct_manager(self):
         for rec in self:
             if rec.state == 'direct_manager':
                 rec.state = 'draft'
-            elif rec.state == 'account1':
-                rec.state = 'direct_manager'
-            elif rec.state == 'account_manager':
-                rec.state = 'account1'
-            elif rec.state == 'financial_manager':
-                rec.state = 'account_manager'
-            elif rec.state == 'cash_management':
-                rec.state = 'financial_manager'
-            elif rec.state == 'account2':
-                rec.state = 'cash_management'
-            else:
-                rec.state = 'draft'
+                rec._send_refuse_email()
 
-            rec._send_refuse_email()
+    def refuse_account1(self):
+        for rec in self:
+            if rec.state == 'account1':
+                rec.state = 'direct_manager'
+                rec._send_refuse_email()
+
+    def refuse_account_manager(self):
+        for rec in self:
+            if rec.state == 'account_manager':
+                rec.state = 'account1'
+                rec._send_refuse_email()
+
+    def refuse_financial_manager(self):
+        for rec in self:
+            if rec.state == 'financial_manager':
+                rec.state = 'account_manager'
+                rec._send_refuse_email()
+
+    def refuse_cash_management(self):
+        for rec in self:
+            if rec.state == 'cash_management':
+                rec.state = 'financial_manager'
+                rec._send_refuse_email()
+
+    def refuse_account2(self):
+        for rec in self:
+            if rec.state == 'account2':
+                rec.state = 'cash_management'
+                rec._send_refuse_email()
+
+
 
 
     # def get_confirm(self):
@@ -358,8 +378,8 @@ class ExpenseLine(models.Model):
     product_ids = fields.Many2one(comodel_name="product.product", string="Product",
                                   domain=[('is_expense', '=', True)])
     name = fields.Char(string="Label", )
-    account_id = fields.Many2one(comodel_name="account.account", string="Account", required=False,
-                                 readonly=False, )
+    # account_id = fields.Many2one(comodel_name="account.account", string="Account", required=False,
+    #                              readonly=False, )
     vendor_id = fields.Many2one(comodel_name='res.partner', string='Vendors', domain=[('supplier_rank', '>', 0)])
     quantity = fields.Float(string="Quantity", required=False, default="1")
     price_unit = fields.Float(string="Price", required=True, )
