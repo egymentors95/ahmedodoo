@@ -18,12 +18,13 @@
     'version': '19.0.0.1.0',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'mail', 'product', 'account'],
+    'depends': ['base', 'mail', 'product', 'account', 'utm', 'hr'],
     # 'depends': ['base', 'account', 'mail', 'purchase','web', 'product', 'stock', 'hr'],
 
     # always loaded
     'data': [
         'security/security.xml',
+        'security/hide_menu_items_views.xml',
         'security/ir.model.access.csv',
         'views/views.xml',
         'views/seq.xml',
