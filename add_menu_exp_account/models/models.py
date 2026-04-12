@@ -408,7 +408,28 @@ class ExpenseLine(models.Model):
             else:
                 rec.tax_ids = False
 
-    
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+
+        for rec in records:
+            rec._link_attachments()
+
+        return records
+
+    def write(self, vals):
+        res = super().write(vals)
+        self._link_attachments()
+        return res
+
+    def _link_attachments(self):
+        for rec in self:
+            for att in rec.attachment_ids:
+                if not att.res_id:
+                    att.write({
+                        'res_model': 'expense.line',
+                        'res_id': rec.id,
+                    })
 
 
 class AccountMoveExpenses(models.Model):
