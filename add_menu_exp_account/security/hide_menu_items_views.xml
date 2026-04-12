@@ -91,13 +91,6 @@
                 ref('add_menu_exp_account.group_link_tracker_user'),
             ])]"/>
         </record>
-        <!--        ________________________________________Setting_______________________________    -->
-
-         <record id="base.menu_administration" model="ir.ui.menu">
-            <field name="group_ids" eval="[(6, 0, [
-                ref('base.group_system'),
-            ])]"/>
-        </record>
 
 
 
