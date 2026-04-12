@@ -42,6 +42,11 @@
                                 type="object"
                                 invisible="state != 'cash_management'"
                                 groups="add_menu_exp_account.group_cash_management"/>
+                        <button name="refuse" string="Refuse"
+                                class="btn-danger"
+                                type="object"
+                                invisible="state == 'draft'"
+                                />
 
 
                         <field name="state" widget="statusbar"/>

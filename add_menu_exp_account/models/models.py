@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, AccessError
 from datetime import date
 
 
@@ -89,35 +89,6 @@ class Expense(models.Model):
 
 
 
-
-
-    def write(self, vals):
-        if 'state' in vals:
-            for rec in self:
-                user = self.env.user
-
-                allowed = False
-
-                if rec.state == 'draft' and rec.user_id == user:
-                    allowed = True
-                elif rec.state == 'direct_manager' and rec.direct_manager == user:
-                    allowed = True
-                elif rec.state == 'account1' and rec.account1 == user:
-                    allowed = True
-                elif rec.state == 'account_manager' and rec.account_manager == user:
-                    allowed = True
-                elif rec.state == 'financial_manager' and rec.financial_manager == user:
-                    allowed = True
-                elif rec.state == 'cash_management' and rec.cash_management == user:
-                    allowed = True
-                elif rec.state == 'account2' and rec.account2 == user:
-                    allowed = True
-
-                if not allowed:
-                    raise UserError("You are not allowed to change this state.")
-
-        return super().write(vals)
-
     @api.depends('user_id')
     def _get_department(self):
         for rec in self:
@@ -139,12 +110,71 @@ class Expense(models.Model):
             'account2': self.account2,
         }.get(self.state)
 
+    def write(self, vals):
+        user = self.env.user
+        print('user', user)
+
+        for rec in self:
+
+            if rec.state == 'draft':
+                if rec.user_id != user:
+                    print('draft')
+                    raise AccessError("Only creator can edit in Draft")
+
+            elif rec.state == 'direct_manager':
+                if rec.direct_manager != user:
+                    raise AccessError("Only Direct Manager can edit")
+
+            elif rec.state == 'account1':
+                if rec.account1 != user:
+                    raise AccessError("Only Accounts 1 can edit")
+
+            elif rec.state == 'account_manager':
+                if rec.account_manager != user:
+                    raise AccessError("Only Account Manager can edit")
+
+            elif rec.state == 'financial_manager':
+                if rec.financial_manager != user:
+                    raise AccessError("Only Financial Manager can edit")
+
+            elif rec.state == 'cash_management':
+                if rec.cash_management != user:
+                    raise AccessError("Only Cash Management can edit")
+
+            elif rec.state == 'account2':
+                if rec.account2 != user:
+                    raise AccessError("Only Accounts 2 can edit")
+
+        return super().write(vals)
     # =========================================
     # 🔥 إرسال الإيميل
     # =========================================
 
     def _send_stage_email(self):
         template = self.env.ref('add_menu_exp_account.email_template_expense_stage')
+
+        for rec in self:
+            user = rec._get_user_by_state()
+
+            if user and user.email:
+                template.send_mail(
+                    rec.id,
+                    email_values={'email_to': user.email},
+                    force_send=True
+                )
+                # ✅ Optional: إضافة Activity
+                rec.activity_schedule(
+                    'mail.mail_activity_data_todo',
+                    user_id=user.id,
+                    summary="Expense Approval Required",
+                )
+
+    # =========================================
+    # Send Refuse mail
+    # =========================================
+
+    def _send_refuse_email(self):
+        template = self.env.ref('add_menu_exp_account.email_template_refuse')
 
         for rec in self:
             user = rec._get_user_by_state()
@@ -211,6 +241,26 @@ class Expense(models.Model):
         for rec in self:
             rec.state = 'account2'
             rec._send_stage_email()
+
+    def refuse(self):
+        for rec in self:
+            if rec.state == 'direct_manager':
+                rec.state = 'draft'
+            elif rec.state == 'account1':
+                rec.state = 'direct_manager'
+            elif rec.state == 'account_manager':
+                rec.state = 'account1'
+            elif rec.state == 'financial_manager':
+                rec.state = 'account_manager'
+            elif rec.state == 'cash_management':
+                rec.state = 'financial_manager'
+            elif rec.state == 'account2':
+                rec.state = 'cash_management'
+            else:
+                rec.state = 'draft'
+
+            rec._send_refuse_email()
+
 
     # def get_confirm(self):
     #     for rec in self:
