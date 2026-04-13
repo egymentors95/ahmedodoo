@@ -44,48 +44,82 @@ class Expense(models.Model):
     department_id = fields.Many2one(comodel_name='user.department', compute='_get_department', store=True)
     # ========================== Users =============================
     user_id = fields.Many2one(comodel_name='res.users', string='User', default=lambda self: self.env.user, copy=False)
-    direct_manager = fields.Many2one(comodel_name='res.users', string='Direct Manager', compute='_get_manager', store=True)
-    account1 = fields.Many2one(comodel_name='res.users', string='Accounts 1', compute='_get_account1', store=True)
-    account_manager = fields.Many2one(comodel_name='res.users', string='Account Manager', compute='_get_account_manager', store=True)
-    financial_manager = fields.Many2one(comodel_name='res.users', string='Financial Manager', compute='_get_financial_manager', store=True)
-    cash_management = fields.Many2one(comodel_name='res.users', string='Cash Management', compute='_get_cash_management', store=True)
-    account2 = fields.Many2one(comodel_name='res.users', string='Accounts 2', compute='_get_account2', store=True)
+    direct_manager = fields.Many2one(comodel_name='res.users', string='Direct Manager')
+    account1 = fields.Many2one(comodel_name='res.users', string='Accounts 1')
+    account_manager = fields.Many2one(comodel_name='res.users', string='Account Manager')
+    financial_manager = fields.Many2one(comodel_name='res.users', string='Financial Manager')
+    cash_management = fields.Many2one(comodel_name='res.users', string='Cash Management')
+    account2 = fields.Many2one(comodel_name='res.users', string='Accounts 2')
 
-    @api.depends('user_id')
-    def _get_manager(self):
+    def _fix_workflow_users(self):
         for rec in self:
-            if rec.user_id:
-                rec.direct_manager = rec.user_id.manager_id.id
+            user = self.env.user
+                    # Groups
+            group_creator = self.env.user.has_group('add_menu_exp_account.group_creator')
+            group_direct_manager = self.env.user.has_group('add_menu_exp_account.group_direct_manager')
+            group_account1 = self.env.user.has_group('add_menu_exp_account.group_account1')
+            group_account_manager = self.env.user.has_group('add_menu_exp_account.group_account_manager')
+            group_financial_manager = self.env.user.has_group('add_menu_exp_account.group_financial_manager')
+            group_cash_management = self.env.user.has_group('add_menu_exp_account.group_cash_management')
+            group_account2 = self.env.user.has_group('add_menu_exp_account.group_account2')
 
-    @api.depends('direct_manager')
-    def _get_account1(self):
-        for rec in self:
-            if rec.direct_manager:
-                rec.account1 = rec.direct_manager.manager_id.id
-
-    @api.depends('account1')
-    def _get_account_manager(self):
-        for rec in self:
-            if rec.account1:
-                rec.account_manager = rec.account1.manager_id.id
-
-    @api.depends('account_manager')
-    def _get_financial_manager(self):
-        for rec in self:
-            if rec.account_manager:
-                rec.financial_manager = rec.account_manager.manager_id.id
-
-    @api.depends('financial_manager')
-    def _get_cash_management(self):
-        for rec in self:
-            if rec.financial_manager:
-                rec.cash_management = rec.financial_manager.manager_id.id
-
-    @api.depends('cash_management')
-    def _get_account2(self):
-        for rec in self:
-            if rec.cash_management:
+            if group_creator and group_direct_manager and group_account1 and group_account_manager and group_financial_manager and group_cash_management and group_account2:
+                rec.user_id = user.id
+                rec.direct_manager = user.id
+                rec.account1 = user.id
+                rec.account_manager = user.id
+                rec.financial_manager = user.id
+                rec.cash_management = user.id
+                rec.account2 = user.id
+            elif group_creator and group_direct_manager and group_account1 and group_account_manager and group_financial_manager and group_cash_management and not group_account2:
+                rec.user_id = user.id
+                rec.direct_manager = user.id
+                rec.account1 = user.id
+                rec.account_manager = user.id
+                rec.financial_manager = user.id
+                rec.cash_management = user.id
                 rec.account2 = rec.cash_management.manager_id.id
+            elif group_creator and group_direct_manager and group_account1 and group_account_manager and group_financial_manager and not group_cash_management and not group_account2:
+                rec.user_id = user.id
+                rec.direct_manager = user.id
+                rec.account1 = user.id
+                rec.account_manager = user.id
+                rec.financial_manager = user.id
+                rec.cash_management = rec.financial_manager.manager_id.id
+                rec.account2 = rec.cash_management.manager_id.id
+            elif group_creator and group_direct_manager and group_account1 and group_account_manager and not group_financial_manager and not group_cash_management and not group_account2:
+                rec.user_id = user.id
+                rec.direct_manager = user.id
+                rec.account1 = user.id
+                rec.account_manager = user.id
+                rec.financial_manager = rec.account_manager.manager_id.id
+                rec.cash_management = rec.financial_manager.manager_id.id
+                rec.account2 = rec.cash_management.manager_id.id
+            elif group_creator and group_direct_manager and group_account1 and not group_account_manager and not group_financial_manager and not group_cash_management and not group_account2:
+                rec.user_id = user.id
+                rec.direct_manager = user.id
+                rec.account1 = user.id
+                rec.account_manager = rec.account1.manager_id.id
+                rec.financial_manager = rec.account_manager.manager_id.id
+                rec.cash_management = rec.financial_manager.manager_id.id
+                rec.account2 = rec.cash_management.manager_id.id
+            elif group_creator and group_direct_manager and not group_account1 and not group_account_manager and not group_financial_manager and not group_cash_management and not group_account2:
+                rec.user_id = user.id
+                rec.direct_manager = user.id
+                rec.account1 = rec.direct_manager.manager_id.id
+                rec.account_manager = rec.account1.manager_id.id
+                rec.financial_manager = rec.account_manager.manager_id.id
+                rec.cash_management = rec.financial_manager.manager_id.id
+                rec.account2 = rec.cash_management.manager_id.id
+            elif group_creator and not group_direct_manager and not group_account1 and not group_account_manager and not group_financial_manager and not group_cash_management and not group_account2:
+                rec.user_id = user.id
+                rec.direct_manager = rec.user_id.manager_id.id
+                rec.account1 = rec.direct_manager.manager_id.id
+                rec.account_manager = rec.account1.manager_id.id
+                rec.financial_manager = rec.account_manager.manager_id.id
+                rec.cash_management = rec.financial_manager.manager_id.id
+                rec.account2 = rec.cash_management.manager_id.id
+
 
 
 
@@ -115,6 +149,7 @@ class Expense(models.Model):
         print('user', user)
 
         for rec in self:
+            print('rec._user_id', rec.user_id.name)
 
             if rec.state == 'draft':
                 if rec.user_id != user:
@@ -208,9 +243,9 @@ class Expense(models.Model):
                 vals['seq'] = self.env['ir.sequence'].next_by_code(
                     'expense.sequence'
                 ) or _('New')
-
-        records = super().create(vals_list)
-        return records
+        record = super(Expense, self).create(vals_list)
+        record._fix_workflow_users()
+        return record
 
     def to_direct_manager(self):
         for rec in self:
