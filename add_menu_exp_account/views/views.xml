@@ -68,11 +68,11 @@
                                 type="object"
                                 invisible="state != 'cash_management'"
                                 groups="add_menu_exp_account.group_cash_management"/>
-                         <button name="refuse_account2" string="Refuse"
-                                class="btn-danger"
-                                type="object"
-                                invisible="state != 'account2'"
-                                groups="add_menu_exp_account.group_account2"/>
+<!--                         <button name="refuse_account2" string="Refuse"-->
+<!--                                class="btn-danger"-->
+<!--                                type="object"-->
+<!--                                invisible="state != 'account2'"-->
+<!--                                groups="add_menu_exp_account.group_account2"/>-->
 
 
                         <field name="state" widget="statusbar"/>

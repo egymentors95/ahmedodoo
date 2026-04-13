@@ -119,8 +119,14 @@ class Expense(models.Model):
                 rec.financial_manager = rec.account_manager.manager_id.id
                 rec.cash_management = rec.financial_manager.manager_id.id
                 rec.account2 = rec.cash_management.manager_id.id
-
-
+            elif group_creator and group_direct_manager and group_account1 and not group_account_manager and not group_financial_manager and not group_cash_management and group_account2:
+                rec.user_id = user.id
+                rec.direct_manager = user.id
+                rec.account1 = user.id
+                rec.account_manager = rec.account1.manager_id.id
+                rec.financial_manager = rec.account_manager.manager_id.id
+                rec.cash_management = rec.financial_manager.manager_id.id
+                rec.account2 = user.id
 
 
     @api.depends('user_id')
@@ -308,11 +314,11 @@ class Expense(models.Model):
                 rec.state = 'financial_manager'
                 rec._send_refuse_email()
 
-    def refuse_account2(self):
-        for rec in self:
-            if rec.state == 'account2':
-                rec.state = 'cash_management'
-                rec._send_refuse_email()
+    # def refuse_account2(self):
+    #     for rec in self:
+    #         if rec.state == 'account2':
+    #             rec.state = 'cash_management'
+    #             rec._send_refuse_email()
 
 
 
