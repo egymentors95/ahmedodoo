@@ -9,7 +9,7 @@
         <field name="arch" type="xml">
 
             <xpath expr="//notebook" position="inside">
-                <page string="Department">
+                <page string="Expense Department">
                     <group>
                         <group>
                             <field name="department_id"/>
@@ -17,10 +17,11 @@
                         <group></group>
                     </group>
                 </page>
-                <page string="Manager">
+                <page string="Expense Manager">
                     <group>
                         <group>
                             <field name="manager_id"/>
+                            <field name="financial_manager_id"/>
                         </group>
                         <group></group>
                     </group>

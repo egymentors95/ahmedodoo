@@ -1,93 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <record id="expense_view_form" model="ir.ui.view">
-            <field name="name">expense_view_form</field>
-            <field name="model">expense.expense</field>
+        <record id="financial_expense_view_form" model="ir.ui.view">
+            <field name="name">financial.Expense.View.Form</field>
+            <field name="model">financial.expense</field>
             <field name="arch" type="xml">
                 <form>
                     <header>
-
-                        <button name="to_direct_manager" string="To Direct Manager"
-                                class="oe_highlight"
-                                type="object"
-                                invisible="state != 'draft'"
-                                groups="add_menu_exp_account.group_creator"/>
                         <button name="to_account1" string="To Account 1"
                                 class="oe_highlight"
                                 type="object"
-                                invisible="state != 'direct_manager'"
-                                groups="add_menu_exp_account.group_direct_manager"/>
-
-                        <button name="to_administration_management" string="To Administration Management"
-                                class="oe_highlight"
-                                type="object"
-                                invisible="state != 'account1'"
-                                groups="add_menu_exp_account.group_account1"/>
+                                invisible="state != 'draft'"
+                                groups="add_menu_exp_account.group_financial_creator"/>
 
                         <button name="to_chief_acc" string="To Chief Accountant"
                                 class="oe_highlight"
                                 type="object"
-                                invisible="state != 'administration_management'"
-                                groups="add_menu_exp_account.group_administration_management"/>
+                                invisible="state != 'account1'"
+                                groups="add_menu_exp_account.group_financial_account1"/>
 
                         <button name="to_cfo" string="To CFO"
                                 class="oe_highlight"
                                 type="object"
                                 invisible="state != 'chief_acc'"
-                                groups="add_menu_exp_account.group_chief_acc"/>
+                                groups="add_menu_exp_account.group_financial_chief_acc"/>
                         <button name="to_upload_bank" string="To Cash Management"
                                 class="oe_highlight"
                                 type="object"
                                 invisible="state != 'cfo'"
-                                groups="add_menu_exp_account.group_cfo"/>
+                                groups="add_menu_exp_account.group_financial_cfo"/>
                         <button name="to_approve" string="To Cash Management"
                                 class="oe_highlight"
                                 type="object"
                                 invisible="state != 'upload_bank'"
-                                groups="add_menu_exp_account.group_upload_bank"/>
+                                groups="add_menu_exp_account.group_financial_upload_bank"/>
 
                         <button name="to_account2" string="To Account 2"
                                 class="oe_highlight"
                                 type="object"
                                 invisible="state != 'approve'"
-                                groups="add_menu_exp_account.group_approve"/>
+                                groups="add_menu_exp_account.group_financial_approve"/>
                         <!--                             Refuse                                -->
-                        <button name="refuse_direct_manager" string="Refuse"
-                                class="btn-danger"
-                                type="object"
-                                invisible="state != 'direct_manager'"
-                                groups="add_menu_exp_account.group_direct_manager"/>
                         <button name="refuse_account1" string="Refuse"
                                 class="btn-danger"
                                 type="object"
                                 invisible="state != 'account1'"
-                                groups="add_menu_exp_account.group_account1"/>
-                        <button name="refuse_administration_management" string="Refuse"
-                                class="btn-danger"
-                                type="object"
-                                invisible="state != 'administration_management'"
-                                groups="add_menu_exp_account.group_administration_management"/>
+                                groups="add_menu_exp_account.group_financial_account1"/>
                         <button name="refuse_chief_acc" string="Refuse"
                                 class="btn-danger"
                                 type="object"
                                 invisible="state != 'chief_acc'"
-                                groups="add_menu_exp_account.group_chief_acc"/>
+                                groups="add_menu_exp_account.group_financial_chief_acc"/>
                         <button name="refuse_cfo" string="Refuse"
                                 class="btn-danger"
                                 type="object"
                                 invisible="state != 'cfo'"
-                                groups="add_menu_exp_account.group_cfo"/>
+                                groups="add_menu_exp_account.group_financial_cfo"/>
                         <button name="refuse_upload_bank" string="Refuse"
                                 class="btn-danger"
                                 type="object"
                                 invisible="state != 'upload_bank'"
-                                groups="add_menu_exp_account.group_upload_bank"/>
+                                groups="add_menu_exp_account.group_financial_upload_bank"/>
                         <button name="refuse_approve" string="Refuse"
                                 class="btn-danger"
                                 type="object"
                                 invisible="state != 'approve'"
-                                groups="add_menu_exp_account.group_approve"/>
+                                groups="add_menu_exp_account.group_financial_approve"/>
 
 
                         <field name="state" widget="statusbar"/>
@@ -141,13 +119,11 @@
                             <page string="Assign to Users" invisible="1">
                                 <group>
                                     <group>
-                                        <field name="direct_manager" options="{'no_create': True}"/>
                                         <field name="account1" options="{'no_create': True}"/>
-                                        <field name="administration_management" options="{'no_create': True}"/>
                                         <field name="chief_acc" options="{'no_create': True}"/>
+                                        <field name="cfo" options="{'no_create': True}"/>
                                     </group>
                                     <group>
-                                        <field name="cfo" options="{'no_create': True}"/>
                                         <field name="upload_bank" options="{'no_create': True}"/>
                                         <field name="approve" options="{'no_create': True}"/>
                                         <field name="account2" options="{'no_create': True}"/>
@@ -161,15 +137,15 @@
                 </form>
             </field>
         </record>
-        <record id="expense_view_tree" model="ir.ui.view">
-            <field name="name">expense_view_tree</field>
-            <field name="model">expense.expense</field>
+
+        <record id="financial_expense_view_tree" model="ir.ui.view">
+            <field name="name">Financial.Expense.View.Tree</field>
+            <field name="model">financial.expense</field>
             <field name="arch" type="xml">
                 <list string="">
                     <field name="seq" readonly="1"/>
                     <field name="name"/>
                     <field name="expense_date"/>
-                    <!--                    <field name="journal_id"/>-->
                     <field name="total" sum="Total"/>
                     <field name="amount_taxed" sum="Un Taxed"/>
                     <field name="tax" sum="Tax"/>
@@ -178,10 +154,10 @@
         </record>
 
 
-        <record id="Expense_view_action" model="ir.actions.act_window">
-            <field name="name">Expenses</field>
+        <record id="financial_expense_view_action" model="ir.actions.act_window">
+            <field name="name">Financial Expenses</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">expense.expense</field>
+            <field name="res_model">financial.expense</field>
             <field name="view_mode">list,form</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
@@ -191,13 +167,8 @@
         </record>
 
 
-        <!--        <menuitem id="Expense_view_menu_ID_categ" name="Expenses" parent="account.menu_finance" sequence="34"/>-->
-        <menuitem id="Expense_view_menu_ID_categ" name="Expenses"
-                  web_icon="add_menu_exp_account,static/description/icon.png"/>
-
-        <menuitem id="expense_category_view" name="Expenses" parent="add_menu_exp_account.Expense_view_menu_ID_categ" sequence="10"/>
-        <menuitem id="Expense_view_menu" name="Expenses" parent="add_menu_exp_account.expense_category_view"
-                  action="Expense_view_action" sequence="10"/>
+        <menuitem id="financial_expense_view_menu" name="Financial Expenses" parent="add_menu_exp_account.Expense_view_menu_ID_categ"
+                  action="financial_expense_view_action" sequence="20" groups="add_menu_exp_account.group_financial_expense_user"/>
 
 
     </data>

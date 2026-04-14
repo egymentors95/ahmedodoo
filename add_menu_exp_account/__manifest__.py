@@ -10,7 +10,7 @@
     """,
 
     'author': "El-Araby",
-    'website': "http://www.yourcompany.com",
+    'website': "",
     'license': 'LGPL-3',
 
     # for the full list
@@ -18,20 +18,23 @@
     'version': '19.0.0.1.0',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'mail', 'product', 'account', 'utm', 'hr'],
+    'depends': ['base', 'mail', 'product', 'account', 'utm', 'hr', 'contacts'],
     # 'depends': ['base', 'account', 'mail', 'purchase','web', 'product', 'stock', 'hr'],
 
     # always loaded
     'data': [
         'security/security.xml',
+        'security/financial_exp_security.xml',
         'security/hide_menu_items_views.xml',
         'security/ir.model.access.csv',
+        'data/seq.xml',
+        'data/email_template_views.xml',
         'views/views.xml',
-        'views/seq.xml',
+        'views/financial_expense_views.xml',
         'views/product_product_views.xml',
         'views/expense_line_views.xml',
         'views/res_users_views.xml',
-        'data/email_template_views.xml',
+        'reports/print_expenses.xml',
     ],
 
 }
