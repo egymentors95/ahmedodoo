@@ -5,15 +5,15 @@
 
           <record id="email_template_expense_stage" model="mail.template">
             <field name="name">Expense Stage Notification</field>
-            <field name="model_id" ref="model_expense_expense"/>
+            <field name="model_id" ref="add_menu_exp_account.model_expense_expense"/>
 
             <field name="subject">
                 Expense {{ object.seq }} requires your action
             </field>
 
-            <field name="email_to">
-                {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}
-            </field>
+<!--            <field name="email_to">-->
+<!--                {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}-->
+<!--            </field>-->
 
             <field name="body_html" type="html">
                 <div>
@@ -33,17 +33,17 @@
         </record>
 
 <!--        Financial Expense    -->
-<record id="email_template_financial_expense_stage" model="mail.template">
+            <record id="email_template_financial_expense_stage" model="mail.template">
             <field name="name">Expense Stage Notification</field>
-            <field name="model_id" ref="model_financial_expense"/>
+            <field name="model_id" ref="add_menu_exp_account.model_financial_expense"/>
 
             <field name="subject">
                 Expense {{ object.seq }} requires your action
             </field>
 
-            <field name="email_to">
-                {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}
-            </field>
+    <!--            <field name="email_to">-->
+    <!--                {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}-->
+    <!--            </field>-->
 
             <field name="body_html" type="html">
                 <div>
@@ -66,15 +66,15 @@
 
         <record id="email_template_refuse" model="mail.template">
             <field name="name">Expense Refuse Notification</field>
-            <field name="model_id" ref="model_expense_expense"/>
+            <field name="model_id" ref="add_menu_exp_account.model_expense_expense"/>
 
             <field name="subject">
                 Expense {{ object.seq }} requires your action
             </field>
 
-            <field name="email_to">
-                {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}
-            </field>
+<!--            <field name="email_to">-->
+<!--                {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}-->
+<!--            </field>-->
 
             <field name="body_html" type="html">
                 <div>
@@ -97,15 +97,15 @@
 
         <record id="financial_email_template_refuse" model="mail.template">
             <field name="name">Expense Refuse Notification</field>
-            <field name="model_id" ref="model_financial_expense"/>
+            <field name="model_id" ref="add_menu_exp_account.model_financial_expense"/>
 
             <field name="subject">
                 Expense {{ object.seq }} requires your action
             </field>
 
-            <field name="email_to">
-                {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}
-            </field>
+<!--            <field name="email_to">-->
+<!--                {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}-->
+<!--            </field>-->
 
             <field name="body_html" type="html">
                 <div>
