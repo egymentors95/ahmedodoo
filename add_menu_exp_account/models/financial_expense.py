@@ -198,12 +198,14 @@ class FinancialExpense(models.Model):
                     email_values={'email_to': user.email},
                     force_send=True
                 )
+
+
                 # ✅ Optional: إضافة Activity
-                # rec.activity_schedule(
-                #     'mail.mail_activity_data_todo',
-                #     user_id=user.id,
-                #     summary="Expense Approval Required",
-                # )
+                rec.activity_schedule(
+                    'mail.mail_activity_data_todo',
+                    user_id=user.id,
+                    summary="Expense Approval Required",
+                )
 
     # =========================================
     # Send Refuse mail
@@ -222,11 +224,11 @@ class FinancialExpense(models.Model):
                     force_send=True
                 )
                 # ✅ Optional: إضافة Activity
-                # rec.activity_schedule(
-                #     'mail.mail_activity_data_todo',
-                #     user_id=user.id,
-                #     summary="Expense Approval Required",
-                # )
+                rec.activity_schedule(
+                    'mail.mail_activity_data_todo',
+                    user_id=user.id,
+                    summary="Expense Approval Required",
+                )
 
     def unlink(self):
         error_message = _('You cannot delete a expense which is in %s state')
