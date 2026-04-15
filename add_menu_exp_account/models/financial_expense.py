@@ -187,7 +187,7 @@ class FinancialExpense(models.Model):
     # =========================================
 
     def _send_stage_email(self):
-        template = self.env.ref('add_menu_exp_account.email_template_expense_stage')
+        template = self.env.ref('add_menu_exp_account.email_template_financial_expense_stage')
 
         for rec in self:
             user = rec._get_user_by_state()
@@ -199,18 +199,18 @@ class FinancialExpense(models.Model):
                     force_send=True
                 )
                 # ✅ Optional: إضافة Activity
-                rec.activity_schedule(
-                    'mail.mail_activity_data_todo',
-                    user_id=user.id,
-                    summary="Expense Approval Required",
-                )
+                # rec.activity_schedule(
+                #     'mail.mail_activity_data_todo',
+                #     user_id=user.id,
+                #     summary="Expense Approval Required",
+                # )
 
     # =========================================
     # Send Refuse mail
     # =========================================
 
     def _send_refuse_email(self):
-        template = self.env.ref('add_menu_exp_account.email_template_refuse')
+        template = self.env.ref('add_menu_exp_account.financial_email_template_refuse')
 
         for rec in self:
             user = rec._get_user_by_state()
@@ -222,11 +222,11 @@ class FinancialExpense(models.Model):
                     force_send=True
                 )
                 # ✅ Optional: إضافة Activity
-                rec.activity_schedule(
-                    'mail.mail_activity_data_todo',
-                    user_id=user.id,
-                    summary="Expense Approval Required",
-                )
+                # rec.activity_schedule(
+                #     'mail.mail_activity_data_todo',
+                #     user_id=user.id,
+                #     summary="Expense Approval Required",
+                # )
 
     def unlink(self):
         error_message = _('You cannot delete a expense which is in %s state')
