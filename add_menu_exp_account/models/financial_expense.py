@@ -193,17 +193,11 @@ class FinancialExpense(models.Model):
             user = rec._get_user_by_state()
 
             if user and user.email:
-                mail_values = {
-                    'subject': f'Expense {rec.seq} Approval',
-                    'body_html': f'''
-                                <p>Hello {user.name},</p>
-                                <p>Your expense <b>{rec.seq}</b> requires your action.</p>
-                            ''',
-                    'email_to': user.email,
-                    'email_from': self.env.user.email,
-                }
-
-                self.env['mail.mail'].sudo().create(mail_values).send()
+                template.send_mail(
+                    rec.id,
+                    email_values={'email_to': user.email},
+                    force_send=True
+                )
                 # ✅ Optional: إضافة Activity
                 # rec.activity_schedule(
                 #     'mail.mail_activity_data_todo',
@@ -222,17 +216,11 @@ class FinancialExpense(models.Model):
             user = rec._get_user_by_state()
 
             if user and user.email:
-                mail_values = {
-                    'subject': f'Expense {rec.seq} Refused',
-                    'body_html': f'''
-                                <p>Hello {user.name},</p>
-                                <p>Your expense <b>{rec.seq}</b> has been refused.</p>
-                            ''',
-                    'email_to': user.email,
-                    'email_from': self.env.user.email,
-                }
-
-                self.env['mail.mail'].sudo().create(mail_values).send()
+                template.send_mail(
+                    rec.id,
+                    email_values={'email_to': user.email},
+                    force_send=True
+                )
                 # ✅ Optional: إضافة Activity
                 # rec.activity_schedule(
                 #     'mail.mail_activity_data_todo',

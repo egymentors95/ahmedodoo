@@ -31,13 +31,13 @@ class Expense(models.Model):
     [
         ('draft', 'creator'),
         ('direct_manager', 'Direct Manager'),
-        ('account1', 'Accounts 1'),
+        # ('account1', 'Accounts 1'),
         ('administration_management', 'Administration Management'),
         ('chief_acc', 'Chief Acc'),
         ('cfo', 'CFO'),
         ('upload_bank', 'Upload Bank'),
         ('approve', 'Approve'),
-        ('account2', 'Accounts 2'),
+        ('account2', 'Accounts'),
 
     ], required=False, default='draft', tracking=True)
     amount_taxed = fields.Float(string="Un Taxed Amount", tracking=True)
@@ -47,7 +47,7 @@ class Expense(models.Model):
     # ========================== Users =============================
     user_id = fields.Many2one(comodel_name='res.users', string='User', default=lambda self: self.env.user, copy=False)
     direct_manager = fields.Many2one(comodel_name='res.users', string='Direct Manager')
-    account1 = fields.Many2one(comodel_name='res.users', string='Accounts 1')
+    # account1 = fields.Many2one(comodel_name='res.users', string='Accounts 1')
     administration_management = fields.Many2one(comodel_name='res.users', string='Administration Management')
     chief_acc = fields.Many2one(comodel_name='res.users', string='Chief Acc')
     cfo = fields.Many2one(comodel_name='res.users', string='CFO')
@@ -61,7 +61,7 @@ class Expense(models.Model):
                     # Groups
             group_creator = self.env.user.has_group('add_menu_exp_account.group_creator')
             group_direct_manager = self.env.user.has_group('add_menu_exp_account.group_direct_manager')
-            group_account1 = self.env.user.has_group('add_menu_exp_account.group_account1')
+            # group_account1 = self.env.user.has_group('add_menu_exp_account.group_account1')
             group_administration_management = self.env.user.has_group('add_menu_exp_account.group_administration_management')
             group_chief_acc = self.env.user.has_group('add_menu_exp_account.group_chief_acc')
             group_cfo = self.env.user.has_group('add_menu_exp_account.group_cfo')
@@ -69,106 +69,98 @@ class Expense(models.Model):
             group_approve = self.env.user.has_group('add_menu_exp_account.approve')
             group_account2 = self.env.user.has_group('add_menu_exp_account.group_account2')
 
-            if group_creator and group_direct_manager and group_account1 and group_administration_management and group_chief_acc and  group_cfo and group_upload_bank and group_approve and group_account2:
+            if group_creator and group_direct_manager  and group_administration_management and group_chief_acc and  group_cfo and group_upload_bank and group_approve and group_account2:
                 rec.user_id = user.id
                 rec.direct_manager = user.id
-                rec.account1 = user.id
                 rec.administration_management = user.id
                 rec.chief_acc = user.id
                 rec.cfo = user.id
                 rec.upload_bank = user.id
                 rec.approve = user.id
                 rec.account2 = user.id
-            elif group_creator and group_direct_manager and group_account1 and group_administration_management and group_chief_acc and group_cfo and group_upload_bank and group_approve and not group_account2:
+            elif group_creator and group_direct_manager  and group_administration_management and group_chief_acc and group_cfo and group_upload_bank and group_approve and not group_account2:
                 rec.user_id = user.id
                 rec.direct_manager = user.id
-                rec.account1 = user.id
                 rec.administration_management = user.id
                 rec.chief_acc = user.id
                 rec.cfo = user.id
                 rec.upload_bank = user.id
                 rec.approve = user.id
                 rec.account2 = rec.approve.manager_id.id
-            elif group_creator and group_direct_manager and group_account1 and group_administration_management and group_chief_acc and group_cfo and group_upload_bank and not group_approve and not group_account2:
+            elif group_creator and group_direct_manager and group_administration_management and group_chief_acc and group_cfo and group_upload_bank and not group_approve and not group_account2:
                 rec.user_id = user.id
                 rec.direct_manager = user.id
-                rec.account1 = user.id
                 rec.administration_management = user.id
                 rec.chief_acc = user.id
                 rec.cfo = user.id
                 rec.upload_bank = user.id
                 rec.approve = rec.upload_bank.manager_id.id
                 rec.account2 = rec.approve.manager_id.id
-            elif group_creator and group_direct_manager and group_account1 and group_administration_management and group_chief_acc and group_cfo and not group_upload_bank and not group_approve and not group_account2:
+            elif group_creator and group_direct_manager  and group_administration_management and group_chief_acc and group_cfo and not group_upload_bank and not group_approve and not group_account2:
                 rec.user_id = user.id
                 rec.direct_manager = user.id
-                rec.account1 = user.id
                 rec.administration_management = user.id
                 rec.chief_acc = user.id
                 rec.cfo = user.id
                 rec.upload_bank = rec.cfo.manager_id.id
                 rec.approve = rec.upload_bank.manager_id.id
                 rec.account2 = rec.approve.manager_id.id
-            elif group_creator and group_direct_manager and group_account1 and group_administration_management and group_chief_acc and not group_cfo and not group_upload_bank and not group_approve and not group_account2:
+            elif group_creator and group_direct_manager  and group_administration_management and group_chief_acc and not group_cfo and not group_upload_bank and not group_approve and not group_account2:
                 rec.user_id = user.id
                 rec.direct_manager = user.id
-                rec.account1 = user.id
                 rec.administration_management = user.id
                 rec.chief_acc = user.id
                 rec.cfo = rec.chief_acc.manager_id.id
                 rec.upload_bank = rec.cfo.manager_id.id
                 rec.approve = rec.upload_bank.manager_id.id
                 rec.account2 = rec.approve.manager_id.id
-            elif group_creator and group_direct_manager and group_account1 and group_administration_management and not group_chief_acc and not group_cfo and not group_upload_bank and not group_approve and not group_account2:
+            elif group_creator and group_direct_manager and group_administration_management and not group_chief_acc and not group_cfo and not group_upload_bank and not group_approve and not group_account2:
                 rec.user_id = user.id
                 rec.direct_manager = user.id
-                rec.account1 = user.id
                 rec.administration_management = user.id
                 rec.chief_acc = rec.administration_management.manager_id.id
                 rec.cfo = rec.chief_acc.manager_id.id
                 rec.upload_bank = rec.cfo.manager_id.id
                 rec.approve = rec.upload_bank.manager_id.id
                 rec.account2 = rec.approve.manager_id.id
-            elif group_creator and group_direct_manager and group_account1 and not group_administration_management and not group_chief_acc and not group_cfo and not group_upload_bank and not group_approve and not group_account2:
+            elif group_creator and group_direct_manager  and not group_administration_management and not group_chief_acc and not group_cfo and not group_upload_bank and not group_approve and not group_account2:
                 rec.user_id = user.id
                 rec.direct_manager = user.id
-                rec.account1 = user.id
-                rec.administration_management = rec.account1.manager_id.id
+                rec.administration_management = rec.direct_manager.manager_id.id
                 rec.chief_acc = rec.administration_management.manager_id.id
                 rec.cfo = rec.chief_acc.manager_id.id
                 rec.upload_bank = rec.cfo.manager_id.id
                 rec.approve = rec.upload_bank.manager_id.id
                 rec.account2 = rec.approve.manager_id.id
-            elif group_creator and group_direct_manager and not group_account1 and not group_administration_management and not group_chief_acc and not group_cfo and not group_upload_bank and not group_approve and not group_account2:
+            elif group_creator and group_direct_manager and not group_administration_management and not group_chief_acc and not group_cfo and not group_upload_bank and not group_approve and not group_account2:
                 rec.user_id = user.id
                 rec.direct_manager = user.id
-                rec.account1 = rec.direct_manager.manager_id.id
-                rec.administration_management = rec.account1.manager_id.id
+                rec.administration_management = rec.direct_manager.manager_id.id
                 rec.chief_acc = rec.administration_management.manager_id.id
                 rec.cfo = rec.chief_acc.manager_id.id
                 rec.upload_bank = rec.cfo.manager_id.id
                 rec.approve = rec.upload_bank.manager_id.id
                 rec.account2 = rec.approve.manager_id.id
-            elif group_creator and not group_direct_manager and not group_account1 and not group_administration_management and not group_chief_acc and not group_cfo and not group_upload_bank and not group_approve and not group_account2:
+            elif group_creator and not group_direct_manager and not group_administration_management and not group_chief_acc and not group_cfo and not group_upload_bank and not group_approve and not group_account2:
                 rec.user_id = user.id
                 rec.direct_manager = rec.user_id.manager_id.id
-                rec.account1 = rec.direct_manager.manager_id.id
-                rec.administration_management = rec.account1.manager_id.id
+                rec.administration_management = rec.direct_manager.manager_id.id
                 rec.chief_acc = rec.administration_management.manager_id.id
                 rec.cfo = rec.chief_acc.manager_id.id
                 rec.upload_bank = rec.cfo.manager_id.id
                 rec.approve = rec.upload_bank.manager_id.id
                 rec.account2 = rec.approve.manager_id.id
-            elif group_creator and group_direct_manager and group_account1 and not group_administration_management and not group_chief_acc and not group_cfo  and not group_upload_bank and not group_approve and group_account2:
+            elif group_creator and group_direct_manager and not group_administration_management and not group_chief_acc and not group_cfo  and not group_upload_bank and not group_approve and group_account2:
                 rec.user_id = user.id
                 rec.direct_manager = user.id
-                rec.account1 = user.id
-                rec.administration_management = rec.account1.manager_id.id
+                rec.administration_management = rec.direct_manager.manager_id.id
                 rec.chief_acc = rec.administration_management.manager_id.id
                 rec.cfo = rec.chief_acc.manager_id.id
                 rec.upload_bank = rec.cfo.manager_id.id
                 rec.approve = rec.upload_bank.manager_id.id
                 rec.account2 = user.id
+
+
 
 
     @api.depends('user_id')
@@ -185,7 +177,6 @@ class Expense(models.Model):
         self.ensure_one()
         return {
             'direct_manager': self.direct_manager,
-            'account1': self.account1,
             'administration_management': self.administration_management,
             'chief_acc': self.chief_acc,
             'cfo': self.cfo,
@@ -210,9 +201,6 @@ class Expense(models.Model):
                 if rec.direct_manager != user:
                     raise AccessError("Only Direct Manager can edit")
 
-            elif rec.state == 'account1':
-                if rec.account1 != user:
-                    raise AccessError("Only Accounts 1 can edit")
 
             elif rec.state == 'administration_management':
                 if rec.administration_management != user:
@@ -243,7 +231,6 @@ class Expense(models.Model):
     # =========================================
     # 🔥 إرسال الإيميل
     # =========================================
-
     def _send_stage_email(self):
         template = self.env.ref('add_menu_exp_account.email_template_expense_stage')
 
@@ -251,23 +238,36 @@ class Expense(models.Model):
             user = rec._get_user_by_state()
 
             if user and user.email:
-                mail_values = {
-                    'subject': f'Expense {rec.seq} Approval',
-                    'body_html': f'''
-                                       <p>Hello {user.name},</p>
-                                       <p>Your expense <b>{rec.seq}</b> requires your action.</p>
-                                   ''',
-                    'email_to': user.email,
-                    'email_from': self.env.user.email,
-                }
+                template.send_mail(
+                    rec.id,
+                    email_values={'email_to': user.email},
+                    force_send=True
+                )
 
-                self.env['mail.mail'].sudo().create(mail_values).send()
-                # ✅ Optional: إضافة Activity
-                # rec.activity_schedule(
-                #     'mail.mail_activity_data_todo',
-                #     user_id=user.id,
-                #     summary="Expense Approval Required",
-                # )
+    # def _send_stage_email(self):
+    #     template = self.env.ref('add_menu_exp_account.email_template_expense_stage')
+    #
+    #     for rec in self:
+    #         user = rec._get_user_by_state()
+    #
+    #         if user and user.email:
+    #             mail_values = {
+    #                 'subject': f'Expense {rec.seq} Approval',
+    #                 'body_html': f'''
+    #                                    <p>Hello {user.name},</p>
+    #                                    <p>Your expense <b>{rec.seq}</b> requires your action.</p>
+    #                                ''',
+    #                 'email_to': user.email,
+    #                 'email_from': self.env.user.email,
+    #             }
+    #
+    #             self.env['mail.mail'].sudo().create(mail_values).send()
+    #             # ✅ Optional: إضافة Activity
+    #             # rec.activity_schedule(
+    #             #     'mail.mail_activity_data_todo',
+    #             #     user_id=user.id,
+    #             #     summary="Expense Approval Required",
+    #             # )
 
     # =========================================
     # Send Refuse mail
@@ -280,17 +280,11 @@ class Expense(models.Model):
             user = rec._get_user_by_state()
 
             if user and user.email:
-                mail_values = {
-                    'subject': f'Expense {rec.seq} Refused',
-                    'body_html': f'''
-                                <p>Hello {user.name},</p>
-                                <p>Your expense <b>{rec.seq}</b> has been refused.</p>
-                            ''',
-                    'email_to': user.email,
-                    'email_from': self.env.user.email,
-                }
-
-                self.env['mail.mail'].sudo().create(mail_values).send()
+                template.send_mail(
+                    rec.id,
+                    email_values={'email_to': user.email},
+                    force_send=True
+                )
                 # ✅ Optional: إضافة Activity
                 # rec.activity_schedule(
                 #     'mail.mail_activity_data_todo',
@@ -319,11 +313,6 @@ class Expense(models.Model):
     def to_direct_manager(self):
         for rec in self:
             rec.state = 'direct_manager'
-            rec._send_stage_email()
-
-    def to_account1(self):
-        for rec in self:
-            rec.state = 'account1'
             rec._send_stage_email()
 
     def to_administration_management(self):
@@ -363,16 +352,12 @@ class Expense(models.Model):
                 rec.state = 'draft'
                 rec._send_refuse_email()
 
-    def refuse_account1(self):
-        for rec in self:
-            if rec.state == 'account1':
-                rec.state = 'direct_manager'
-                rec._send_refuse_email()
+
 
     def refuse_administration_management(self):
         for rec in self:
             if rec.state == 'administration_management':
-                rec.state = 'account1'
+                rec.state = 'direct_manager'
                 rec._send_refuse_email()
 
     def refuse_chief_acc(self):

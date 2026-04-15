@@ -13,17 +13,12 @@
                                 type="object"
                                 invisible="state != 'draft'"
                                 groups="add_menu_exp_account.group_creator"/>
-                        <button name="to_account1" string="To Account 1"
-                                class="oe_highlight"
-                                type="object"
-                                invisible="state != 'direct_manager'"
-                                groups="add_menu_exp_account.group_direct_manager"/>
 
                         <button name="to_administration_management" string="To Administration Management"
                                 class="oe_highlight"
                                 type="object"
-                                invisible="state != 'account1'"
-                                groups="add_menu_exp_account.group_account1"/>
+                                invisible="state != 'direct_manager'"
+                                groups="add_menu_exp_account.group_direct_manager"/>
 
                         <button name="to_chief_acc" string="To Chief Accountant"
                                 class="oe_highlight"
@@ -58,11 +53,7 @@
                                 type="object"
                                 invisible="state != 'direct_manager'"
                                 groups="add_menu_exp_account.group_direct_manager"/>
-                        <button name="refuse_account1" string="Refuse"
-                                class="btn-danger"
-                                type="object"
-                                invisible="state != 'account1'"
-                                groups="add_menu_exp_account.group_account1"/>
+
                         <button name="refuse_administration_management" string="Refuse"
                                 class="btn-danger"
                                 type="object"
@@ -142,8 +133,7 @@
                                 <group>
                                     <group>
                                         <field name="direct_manager" options="{'no_create': True}"/>
-                                        <field name="account1" options="{'no_create': True}"/>
-                                        <field name="administration_management" options="{'no_create': True}"/>
+y                                        <field name="administration_management" options="{'no_create': True}"/>
                                         <field name="chief_acc" options="{'no_create': True}"/>
                                     </group>
                                     <group>
