@@ -41,7 +41,7 @@ class Expense(models.Model):
 
     ], required=False, default='draft', tracking=True)
     amount_taxed = fields.Float(string="Un Taxed Amount", tracking=True)
-    seq = fields.Char(readonly=True, copy=False, default=lambda self: _('New'))
+    seq = fields.Char(readonly=True, copy=False, default=lambda self: 'New')
     company_id = fields.Many2one(comodel_name='res.company', string='Company', default=lambda self: self.env.company)
     department_id = fields.Many2one(comodel_name='user.department', compute='_get_department', store=True)
     # ========================== Users =============================
@@ -251,10 +251,15 @@ class Expense(models.Model):
             user = rec._get_user_by_state()
 
             if user and user.email:
-                template.send_mail(
+                template.with_context(
+                    tracking_disable=True,
+                    mail_notrack=True,
+                    mail_create_nosubscribe=True,
+                    mail_notify_force_send=False,
+                ).send_mail(
                     rec.id,
                     email_values={'email_to': user.email},
-                    force_send=True
+                    force_send=True,
                 )
                 # ✅ Optional: إضافة Activity
                 # rec.activity_schedule(
@@ -274,10 +279,15 @@ class Expense(models.Model):
             user = rec._get_user_by_state()
 
             if user and user.email:
-                template.send_mail(
+                template.with_context(
+                    tracking_disable=True,
+                    mail_notrack=True,
+                    mail_create_nosubscribe=True,
+                    mail_notify_force_send=False,
+                ).send_mail(
                     rec.id,
                     email_values={'email_to': user.email},
-                    force_send=True
+                    force_send=True,
                 )
                 # ✅ Optional: إضافة Activity
                 # rec.activity_schedule(
@@ -298,8 +308,9 @@ class Expense(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
-            if vals.get('seq', _('New')) == _('New'):
-                vals['seq'] = self.env['ir.sequence'].next_by_code('expense.sequence') or _('New')
+            if vals.get('seq', 'New') == 'New':
+                company = self.env['res.company'].browse(vals.get('company_id')) or self.env.company
+                vals['seq'] = self.env['ir.sequence'].with_company(company).next_by_code('expense.sequence') or 'New'
         record = super(Expense, self).create(vals_list)
         record._fix_workflow_users()
         return record
