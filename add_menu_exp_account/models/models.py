@@ -261,6 +261,13 @@ class Expense(models.Model):
                     email_values={'email_to': user.email},
                     force_send=True,
                 )
+                last_message = self.env['mail.message'].search([
+                    ('model', '=', rec._name),
+                    ('res_id', '=', rec.id),
+                ], order='id desc', limit=1)
+
+                if last_message:
+                    last_message.sudo().unlink()
                 # ✅ Optional: إضافة Activity
                 # rec.activity_schedule(
                 #     'mail.mail_activity_data_todo',
