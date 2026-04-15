@@ -17,7 +17,7 @@
                 <div>
 
                     <!-- BUTTON TOP -->
-                    <div style="text-align:center; margin-bottom:20px;">
+                    <div style="text-align:left; margin-bottom:20px;">
                         <a t-att-href="'/web#id=%s&amp;model=expense.expense&amp;view_type=form' % object.id"
                            style="
                     background-color:#875A7B;
@@ -31,6 +31,8 @@
                             Open Expense
                         </a>
                     </div>
+                                        <hr style="border:0; border-top:1px solid #ddd; width:60%; margin:20px 0;"/>
+
 
                     <p>
                         Hello
@@ -63,7 +65,7 @@
                 <div>
 
                     <!-- BUTTON TOP -->
-                    <div style="text-align:center; margin-bottom:20px;">
+                    <div style="text-align:left; margin-bottom:20px;">
                         <a t-att-href="'/web#id=%s&amp;model=financial.expense&amp;view_type=form' % object.id"
                            style="
                     background-color:#875A7B;
@@ -74,9 +76,11 @@
                     display:inline-block;
                     font-weight:bold;
                ">
-                            Open Expense
+                            Open Financial Expense
                         </a>
                     </div>
+                                        <hr style="border:0; border-top:1px solid #ddd; width:60%; margin:20px 0;"/>
+
 
                     <p>
                         Hello
@@ -111,7 +115,7 @@
                 <div>
 
                     <!-- BUTTON TOP -->
-                    <div style="text-align:center; margin-bottom:20px;">
+                    <div style="text-align:left; margin-bottom:20px;">
                         <a t-att-href="'/web#id=%s&amp;model=expense.expense&amp;view_type=form' % object.id"
                            style="
                     background-color:#875A7B;
@@ -125,6 +129,8 @@
                             Open Expense
                         </a>
                     </div>
+                                        <hr style="border:0; border-top:1px solid #ddd; width:60%; margin:20px 0;"/>
+
 
                     <p>
                         Hello
@@ -160,7 +166,7 @@
                 <div>
 
                     <!-- BUTTON TOP -->
-                    <div style="text-align:center; margin-bottom:20px;">
+                    <div style="text-align:left; margin-bottom:20px;">
                         <a t-att-href="'/web#id=%s&amp;model=financial.expense&amp;view_type=form' % object.id"
                            style="
                     background-color:#875A7B;
@@ -171,9 +177,11 @@
                     display:inline-block;
                     font-weight:bold;
                ">
-                            Open Expense
+                            Open Financial Expense
                         </a>
                     </div>
+                    <hr style="border:0; border-top:1px solid #ddd; width:60%; margin:20px 0;"/>
+
 
                     <p>
                         Hello
