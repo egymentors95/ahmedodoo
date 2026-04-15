@@ -257,11 +257,11 @@ class Expense(models.Model):
                     force_send=True
                 )
                 # ✅ Optional: إضافة Activity
-                rec.activity_schedule(
-                    'mail.mail_activity_data_todo',
-                    user_id=user.id,
-                    summary="Expense Approval Required",
-                )
+                # rec.activity_schedule(
+                #     'mail.mail_activity_data_todo',
+                #     user_id=user.id,
+                #     summary="Expense Approval Required",
+                # )
 
     # =========================================
     # Send Refuse mail
@@ -494,8 +494,6 @@ class ExpenseLine(models.Model):
     product_ids = fields.Many2one(comodel_name="product.product", string="Product",
                                   domain=[('is_expense', '=', True)])
     name = fields.Char(string="Label", )
-    # account_id = fields.Many2one(comodel_name="account.account", string="Account", required=False,
-    #                              readonly=False, )
     vendor_id = fields.Many2one(comodel_name='res.partner', string='Vendors', domain=[('supplier_rank', '>', 0)])
     quantity = fields.Float(string="Quantity", required=False, default="1")
     price_unit = fields.Float(string="Price", required=True, )
@@ -503,6 +501,7 @@ class ExpenseLine(models.Model):
     price_subtotal = fields.Float(string="Subtotal", required=False, )
     vat_value = fields.Float(string='Vat Value', compute='_get_total_vat', store=True)
     attachment_ids = fields.Many2many(comodel_name='ir.attachment', string='Attachments', )
+
 
     @api.depends('price_subtotal', 'tax_ids')
     def _get_total_vat(self):

@@ -36,12 +36,12 @@
                                 type="object"
                                 invisible="state != 'chief_acc'"
                                 groups="add_menu_exp_account.group_chief_acc"/>
-                        <button name="to_upload_bank" string="To Cash Management"
+                        <button name="to_upload_bank" string="To Upload Bank"
                                 class="oe_highlight"
                                 type="object"
                                 invisible="state != 'cfo'"
                                 groups="add_menu_exp_account.group_cfo"/>
-                        <button name="to_approve" string="To Cash Management"
+                        <button name="to_approve" string="To Approve"
                                 class="oe_highlight"
                                 type="object"
                                 invisible="state != 'upload_bank'"
@@ -169,7 +169,6 @@
                     <field name="seq" readonly="1"/>
                     <field name="name"/>
                     <field name="expense_date"/>
-                    <!--                    <field name="journal_id"/>-->
                     <field name="total" sum="Total"/>
                     <field name="amount_taxed" sum="Un Taxed"/>
                     <field name="tax" sum="Tax"/>
@@ -193,7 +192,7 @@
 
         <!--        <menuitem id="Expense_view_menu_ID_categ" name="Expenses" parent="account.menu_finance" sequence="34"/>-->
         <menuitem id="Expense_view_menu_ID_categ" name="Expenses"
-                  web_icon="add_menu_exp_account,static/description/icon.png"/>
+                  web_icon="add_menu_exp_account,static/description/icon.png" groups="add_menu_exp_account.group_expense_user"/>
 
         <menuitem id="expense_category_view" name="Expenses" parent="add_menu_exp_account.Expense_view_menu_ID_categ" sequence="10"/>
         <menuitem id="Expense_view_menu" name="Expenses" parent="add_menu_exp_account.expense_category_view"
