@@ -193,16 +193,16 @@ class FinancialExpense(models.Model):
             user = rec._get_user_by_state()
 
             if user and user.email:
-                msg_id = template.send_mail(
+                template.with_context(
+                    mail_notrack=True,
+                    tracking_disable=True,
+                    mail_create_nosubscribe=True,
+                    mail_post_autofollow=False,
+                ).send_mail(
                     rec.id,
                     email_values={'email_to': user.email},
                     force_send=True,
-                    raise_exception=False,
                 )
-
-                # حذف من chatter
-                if msg_id:
-                    self.env['mail.message'].sudo().browse(msg_id).unlink()
                 # ✅ Optional: إضافة Activity
                 # rec.activity_schedule(
                 #     'mail.mail_activity_data_todo',
@@ -221,16 +221,16 @@ class FinancialExpense(models.Model):
             user = rec._get_user_by_state()
 
             if user and user.email:
-                msg_id = template.send_mail(
+                template.with_context(
+                    mail_notrack=True,
+                    tracking_disable=True,
+                    mail_create_nosubscribe=True,
+                    mail_post_autofollow=False,
+                ).send_mail(
                     rec.id,
                     email_values={'email_to': user.email},
                     force_send=True,
-                    raise_exception=False,
                 )
-
-                # حذف من chatter
-                if msg_id:
-                    self.env['mail.message'].sudo().browse(msg_id).unlink()
                 # ✅ Optional: إضافة Activity
                 # rec.activity_schedule(
                 #     'mail.mail_activity_data_todo',
