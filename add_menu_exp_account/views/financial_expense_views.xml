@@ -79,7 +79,7 @@
                         <group>
                             <group>
                                 <field name="expense_date"
-                                       readonly="state == 'confirm'"/>
+                                       readonly="state != 'draft'"/>
                                 <field name="user_id" invisible="0" readonly="1"/>
                                 <field name="department_id" invisible="0" readonly="1"/>
                             </group>
@@ -91,7 +91,7 @@
                         <notebook>
                             <page string="Expenses">
                                 <field name="expenses_ids"
-                                       readonly="state == 'confirm'">
+                                       readonly="state != 'draft'">
                                     <list editable="bottom">
                                         <field name="product_ids" options="{'no_create': True}"/>
                                         <field name="name" optional="show"/>

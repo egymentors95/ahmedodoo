@@ -106,7 +106,7 @@ class FinancialExpense(models.Model):
                 rec.account2 = rec.approve.financial_manager_id.id
             elif group_financial_creator and not group_financial_account1 and not group_financial_chief_acc and not group_financial_cfo and not group_financial_upload_bank and not group_financial_approve and not group_financial_account2:
                 rec.user_id = user.id
-                rec.account1 = user.id
+                rec.account1 = rec.user_id.financial_manager_id.id
                 rec.chief_acc = rec.account1.financial_manager_id.id
                 rec.cfo = rec.chief_acc.financial_manager_id.id
                 rec.upload_bank = rec.cfo.financial_manager_id.id
@@ -241,8 +241,7 @@ class FinancialExpense(models.Model):
     def create(self, vals_list):
         for vals in vals_list:
             if vals.get('seq', _('New')) == _('New'):
-                company = self.env['res.company'].browse(vals.get('company_id')) or self.env.company
-                vals['seq'] = self.env['ir.sequence'].with_company(company).next_by_code('financial.sequence') or _('New')
+                vals['seq'] = self.env['ir.sequence'].next_by_code('financial.sequence') or _('New')
         record = super(FinancialExpense, self).create(vals_list)
         record._fix_workflow_users()
         return record
