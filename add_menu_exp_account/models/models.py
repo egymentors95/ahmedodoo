@@ -255,11 +255,12 @@ class Expense(models.Model):
                     tracking_disable=True,
                     mail_notrack=True,
                     mail_create_nosubscribe=True,
-                    mail_notify_force_send=False,
                 ).send_mail(
                     rec.id,
                     email_values={'email_to': user.email},
                     force_send=True,
+                    notif_layout=False,
+                    raise_exception=False,
                 )
                 # ✅ Optional: إضافة Activity
                 # rec.activity_schedule(
@@ -283,11 +284,12 @@ class Expense(models.Model):
                     tracking_disable=True,
                     mail_notrack=True,
                     mail_create_nosubscribe=True,
-                    mail_notify_force_send=False,
                 ).send_mail(
                     rec.id,
                     email_values={'email_to': user.email},
                     force_send=True,
+                    notif_layout=False,
+                    raise_exception=False,
                 )
                 # ✅ Optional: إضافة Activity
                 # rec.activity_schedule(
