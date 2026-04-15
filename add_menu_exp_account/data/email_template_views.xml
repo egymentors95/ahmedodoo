@@ -1,85 +1,119 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <data>
-<!--            Expense Expense    -->
+        <!--            Expense Expense    -->
 
-          <record id="email_template_expense_stage" model="mail.template">
+        <record id="email_template_expense_stage" model="mail.template">
             <field name="name">Expense Stage Notification</field>
-            <field name="model_id" ref="add_menu_exp_account.model_expense_expense"/>
+            <field name="model_id" ref="model_expense_expense"/>
 
             <field name="subject">
                 Expense {{ object.seq }} requires your action
             </field>
 
-            <field name="body_html" type="html">
-                <div>
-                    <p>
-                        Hello
-                        <t t-out="object._get_user_by_state().name if object._get_user_by_state() else ''"/>,
-                    </p>
-
-                    <p>
-                        Expense <strong t-out="object.seq"/> is waiting for your approval.
-                    </p>
-
-                    <p>Please review it in the system.</p>
-                </div>
+            <field name="email_to">
+                {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}
             </field>
 
+<field name="body_html" type="html">
+    <div>
+        <p>
+            Hello
+            <t t-out="object._get_user_by_state().name if object._get_user_by_state() else ''"/>,
+        </p>
+
+        <p>
+            Expense
+            <strong t-out="object.seq"/>
+            is waiting for your approval.
+        </p>
+
+        <p>Please review it in the system.</p>
+
+        <p>
+            You can view the expense directly here:
+            <a t-att-href="'/web#id=%s&amp;model=expense.expense&amp;view_type=form' % object.id">
+                Open Expense
+            </a>
+        </p>
+    </div>
+</field>
         </record>
 
-<!--        Financial Expense    -->
-            <record id="email_template_financial_expense_stage" model="mail.template">
+        <!--        Financial Expense    -->
+        <record id="email_template_financial_expense_stage" model="mail.template">
             <field name="name">Expense Stage Notification</field>
-            <field name="model_id" ref="add_menu_exp_account.model_financial_expense"/>
+            <field name="model_id" ref="model_financial_expense"/>
+            <field name="subject">Expense {{ object.seq }} requires your action</field>
 
-            <field name="subject">
-                Expense {{ object.seq }} requires your action
+            <field name="email_to">
+                {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}
             </field>
 
+     <field name="body_html" type="html">
+    <div>
+        <p>
+            Hello
+            <t t-out="object._get_user_by_state().name if object._get_user_by_state() else ''"/>,
+        </p>
 
-            <field name="body_html" type="html">
-                <div>
-                    <p>
-                        Hello
-                        <t t-out="object._get_user_by_state().name if object._get_user_by_state() else ''"/>,
-                    </p>
+        <p>
+            Expense
+            <strong t-out="object.seq"/>
+            is waiting for your approval.
+        </p>
 
-                    <p>
-                        Expense <strong t-out="object.seq"/> is waiting for your approval.
-                    </p>
+        <p>Please review it in the system.</p>
 
-                    <p>Please review it in the system.</p>
-                </div>
-            </field>
+        <p>
+            You can view the expense directly here:
+            <a t-att-href="'/web#id=%s&amp;model=expense.expense&amp;view_type=form' % object.id">
+                Open Expense
+            </a>
+        </p>
+    </div>
+</field>
 
         </record>
-<!--        Refuse mail       -->
-<!--        Expense Expense       -->
+        <!--        Refuse mail       -->
+        <!--        Expense Expense       -->
 
         <record id="email_template_refuse" model="mail.template">
             <field name="name">Expense Refuse Notification</field>
-            <field name="model_id" ref="add_menu_exp_account.model_expense_expense"/>
+            <field name="model_id" ref="model_expense_expense"/>
 
             <field name="subject">
                 Expense {{ object.seq }} requires your action
             </field>
 
-
-            <field name="body_html" type="html">
-                <div>
-                    <p>
-                        Hello
-                        <t t-out="object._get_user_by_state().name if object._get_user_by_state() else ''"/>,
-                    </p>
-
-                    <p>
-                        Expense <strong t-out="object.seq"/> is waiting for your approval.
-                    </p>
-
-                    <p>Please review it in the system.</p>
-                </div>
+            <field name="email_to">
+                {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}
             </field>
+
+               <field name="body_html" type="html">
+    <div>
+        <p>
+            Hello
+            <t t-out="object._get_user_by_state().name if object._get_user_by_state() else ''"/>,
+        </p>
+
+        <p>
+            Expense
+            <strong t-out="object.seq"/>
+            is waiting for your approval.
+        </p>
+
+        <p>Please review it in the system.</p>
+
+        <p>
+            You can view the expense directly here:
+            <a t-att-href="'/web#id=%s&amp;model=expense.expense&amp;view_type=form' % object.id">
+                Open Expense
+            </a>
+        </p>
+    </div>
+</field>
+
 
         </record>
 
@@ -87,30 +121,40 @@
 
         <record id="financial_email_template_refuse" model="mail.template">
             <field name="name">Expense Refuse Notification</field>
-            <field name="model_id" ref="add_menu_exp_account.model_financial_expense"/>
+            <field name="model_id" ref="model_financial_expense"/>
 
             <field name="subject">
                 Expense {{ object.seq }} requires your action
             </field>
 
-<!--            <field name="email_to">-->
-<!--                {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}-->
-<!--            </field>-->
-
-            <field name="body_html" type="html">
-                <div>
-                    <p>
-                        Hello
-                        <t t-out="object._get_user_by_state().name if object._get_user_by_state() else ''"/>,
-                    </p>
-
-                    <p>
-                        Expense <strong t-out="object.seq"/> is waiting for your approval.
-                    </p>
-
-                    <p>Please review it in the system.</p>
-                </div>
+            <field name="email_to">
+                {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}
             </field>
+
+                <field name="body_html" type="html">
+    <div>
+        <p>
+            Hello
+            <t t-out="object._get_user_by_state().name if object._get_user_by_state() else ''"/>,
+        </p>
+
+        <p>
+            Expense
+            <strong t-out="object.seq"/>
+            is waiting for your approval.
+        </p>
+
+        <p>Please review it in the system.</p>
+
+        <p>
+            You can view the expense directly here:
+            <a t-att-href="'/web#id=%s&amp;model=expense.expense&amp;view_type=form' % object.id">
+                Open Expense
+            </a>
+        </p>
+    </div>
+</field>
+
 
         </record>
 
