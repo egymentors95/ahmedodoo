@@ -194,13 +194,13 @@ class FinancialExpense(models.Model):
 
             if user and user.email:
                 mail_values = {
-                    'subject': f'Expense {rec.seq} Refused',
+                    'subject': f'Expense {rec.seq} Approval',
                     'body_html': f'''
                                 <p>Hello {user.name},</p>
-                                <p>Your expense <b>{rec.seq}</b> has been refused.</p>
+                                <p>Your expense <b>{rec.seq}</b> requires your action.</p>
                             ''',
                     'email_to': user.email,
-                    'email_from': self.env.user.email or 'no-reply@test.com',
+                    'email_from': self.env.user.email,
                 }
 
                 self.env['mail.mail'].sudo().create(mail_values).send()

@@ -251,23 +251,17 @@ class Expense(models.Model):
             user = rec._get_user_by_state()
 
             if user and user.email:
-                template.with_context(
-                    mail_notrack=True,
-                    tracking_disable=True,
-                    mail_create_nosubscribe=True,
-                    mail_post_autofollow=False,
-                ).send_mail(
-                    rec.id,
-                    email_values={'email_to': user.email},
-                    force_send=True,
-                )
-                last_message = self.env['mail.message'].search([
-                    ('model', '=', rec._name),
-                    ('res_id', '=', rec.id),
-                ], order='id desc', limit=1)
+                mail_values = {
+                    'subject': f'Expense {rec.seq} Approval',
+                    'body_html': f'''
+                                       <p>Hello {user.name},</p>
+                                       <p>Your expense <b>{rec.seq}</b> requires your action.</p>
+                                   ''',
+                    'email_to': user.email,
+                    'email_from': self.env.user.email,
+                }
 
-                if last_message:
-                    last_message.sudo().unlink()
+                self.env['mail.mail'].sudo().create(mail_values).send()
                 # ✅ Optional: إضافة Activity
                 # rec.activity_schedule(
                 #     'mail.mail_activity_data_todo',
@@ -286,26 +280,17 @@ class Expense(models.Model):
             user = rec._get_user_by_state()
 
             if user and user.email:
-                # send email (this creates chatter message)
-                template.with_context(
-                    tracking_disable=True,
-                    mail_notrack=True,
-                    mail_create_nosubscribe=True,
-                    mail_post_autofollow=False,
-                ).send_mail(
-                    rec.id,
-                    email_values={'email_to': user.email},
-                    force_send=True,
-                )
+                mail_values = {
+                    'subject': f'Expense {rec.seq} Refused',
+                    'body_html': f'''
+                                <p>Hello {user.name},</p>
+                                <p>Your expense <b>{rec.seq}</b> has been refused.</p>
+                            ''',
+                    'email_to': user.email,
+                    'email_from': self.env.user.email,
+                }
 
-                # 🔥 delete last chatter message
-                last_message = self.env['mail.message'].search([
-                    ('model', '=', rec._name),
-                    ('res_id', '=', rec.id),
-                ], order='id desc', limit=1)
-
-                if last_message:
-                    last_message.sudo().unlink()
+                self.env['mail.mail'].sudo().create(mail_values).send()
                 # ✅ Optional: إضافة Activity
                 # rec.activity_schedule(
                 #     'mail.mail_activity_data_todo',
