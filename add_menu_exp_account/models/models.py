@@ -309,8 +309,7 @@ class Expense(models.Model):
     def create(self, vals_list):
         for vals in vals_list:
             if vals.get('seq', 'New') == 'New':
-                company = self.env['res.company'].browse(vals.get('company_id')) or self.env.company
-                vals['seq'] = self.env['ir.sequence'].with_company(company).next_by_code('expense.sequence') or 'New'
+                vals['seq'] = self.env['ir.sequence'].next_by_code('expense.sequence') or 'New'
         record = super(Expense, self).create(vals_list)
         record._fix_workflow_users()
         return record
