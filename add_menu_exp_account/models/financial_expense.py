@@ -193,18 +193,11 @@ class FinancialExpense(models.Model):
             user = rec._get_user_by_state()
 
             if user and user.email:
+                email = user.email.strip().replace('\n', '').replace('\r', '')
                 template.send_mail(
                     rec.id,
-                    email_values={'email_to': user.email},
+                    email_values={'email_to': email},
                     force_send=True
-                )
-
-
-                # ✅ Optional: إضافة Activity
-                rec.activity_schedule(
-                    'mail.mail_activity_data_todo',
-                    user_id=user.id,
-                    summary="Expense Approval Required",
                 )
 
     # =========================================
@@ -218,16 +211,11 @@ class FinancialExpense(models.Model):
             user = rec._get_user_by_state()
 
             if user and user.email:
+                email = user.email.strip().replace('\n', '').replace('\r', '')
                 template.send_mail(
                     rec.id,
-                    email_values={'email_to': user.email},
+                    email_values={'email_to': email},
                     force_send=True
-                )
-                # ✅ Optional: إضافة Activity
-                rec.activity_schedule(
-                    'mail.mail_activity_data_todo',
-                    user_id=user.id,
-                    summary="Expense Approval Required",
                 )
 
     def unlink(self):

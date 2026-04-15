@@ -238,17 +238,12 @@ class Expense(models.Model):
             user = rec._get_user_by_state()
 
             if user and user.email:
+                email = user.email.strip().replace('\n', '').replace('\r', '')
                 template.send_mail(
                     rec.id,
-                    email_values={'email_to': user.email},
+                    email_values={'email_to': email},
                     force_send=True
                 )
-                rec.activity_schedule(
-                    'mail.mail_activity_data_todo',
-                    user_id=user.id,
-                    summary="Expense Approval Required",
-                )
-
     # def _send_stage_email(self):
     #     template = self.env.ref('add_menu_exp_account.email_template_expense_stage')
     #
@@ -285,18 +280,12 @@ class Expense(models.Model):
             user = rec._get_user_by_state()
 
             if user and user.email:
+                email = user.email.strip().replace('\n', '').replace('\r', '')
                 template.send_mail(
                     rec.id,
-                    email_values={'email_to': user.email},
+                    email_values={'email_to': email},
                     force_send=True
                 )
-                # ✅ Optional: إضافة Activity
-                rec.activity_schedule(
-                    'mail.mail_activity_data_todo',
-                    user_id=user.id,
-                    summary="Expense Approval Required",
-                )
-
     def unlink(self):
         error_message = _('You cannot delete a expense which is in %s state')
         state_description_values = {elem[0]: elem[1] for elem in self._fields['state']._description_selection(self.env)}

@@ -11,10 +11,6 @@
                 Expense {{ object.seq }} requires your action
             </field>
 
-<!--            <field name="email_to">-->
-<!--                {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}-->
-<!--            </field>-->
-
             <field name="body_html" type="html">
                 <div>
                     <p>
@@ -41,9 +37,6 @@
                 Expense {{ object.seq }} requires your action
             </field>
 
-    <!--            <field name="email_to">-->
-    <!--                {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}-->
-    <!--            </field>-->
 
             <field name="body_html" type="html">
                 <div>
@@ -72,9 +65,6 @@
                 Expense {{ object.seq }} requires your action
             </field>
 
-<!--            <field name="email_to">-->
-<!--                {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}-->
-<!--            </field>-->
 
             <field name="body_html" type="html">
                 <div>
