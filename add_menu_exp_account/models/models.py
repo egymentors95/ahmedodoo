@@ -41,7 +41,7 @@ class Expense(models.Model):
 
     ], required=False, default='draft', tracking=True)
     amount_taxed = fields.Float(string="Un Taxed Amount", tracking=True)
-    seq = fields.Char(readonly=True, copy=False, )
+    seq = fields.Char(readonly=True, copy=False, default=lambda self: _('New'))
     company_id = fields.Many2one(comodel_name='res.company', string='Company', default=lambda self: self.env.company)
     department_id = fields.Many2one(comodel_name='user.department', compute='_get_department', store=True)
     # ========================== Users =============================
@@ -299,9 +299,8 @@ class Expense(models.Model):
     def create(self, vals_list):
         for vals in vals_list:
             if vals.get('seq', _('New')) == _('New'):
-                vals['seq'] = self.env['ir.sequence'].next_by_code(
-                    'expense.sequence'
-                ) or _('New')
+                company = self.env['res.company'].browse(vals.get('company_id')) or self.env.company
+                vals['seq'] = self.env['ir.sequence'].with_company(company).next_by_code('expense.sequence') or _('New')
         record = super(Expense, self).create(vals_list)
         record._fix_workflow_users()
         return record

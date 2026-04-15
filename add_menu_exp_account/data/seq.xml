@@ -5,15 +5,15 @@
             <field name="name">expense_sequence</field>
             <field name="code">expense.sequence</field>
             <field name="prefix">Exp</field>
-            <field name="padding">3</field>
+            <field name="padding">5</field>
             <field name="company_id" eval="False"/>
         </record>
-<!--        Financial Expense      -->
-         <record id="financial_expense_sequence" model="ir.sequence">
+        <!--        Financial Expense      -->
+        <record id="financial_expense_sequence" model="ir.sequence">
             <field name="name">Financial Expense</field>
             <field name="code">financial.sequence</field>
-            <field name="prefix">Exp</field>
-            <field name="padding">3</field>
+            <field name="prefix">EXP</field>
+            <field name="padding">5</field>
             <field name="company_id" eval="False"/>
         </record>
     </data>
