@@ -7,37 +7,46 @@
             <field name="name">Expense Stage Notification</field>
             <field name="model_id" ref="model_expense_expense"/>
 
-            <field name="subject">
-                Expense {{ object.seq }} requires your action
-            </field>
+            <field name="subject">Expense {{ object.seq }} requires your action</field>
 
             <field name="email_to">
                 {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}
             </field>
 
-<field name="body_html" type="html">
-    <div>
-        <p>
-            Hello
-            <t t-out="object._get_user_by_state().name if object._get_user_by_state() else ''"/>,
-        </p>
+            <field name="body_html" type="html">
+                <div>
 
-        <p>
-            Expense
-            <strong t-out="object.seq"/>
-            is waiting for your approval.
-        </p>
+                    <!-- BUTTON TOP -->
+                    <div style="text-align:center; margin-bottom:20px;">
+                        <a t-att-href="'/web#id=%s&amp;model=expense.expense&amp;view_type=form' % object.id"
+                           style="
+                    background-color:#875A7B;
+                    color:white;
+                    padding:10px 20px;
+                    text-decoration:none;
+                    border-radius:5px;
+                    display:inline-block;
+                    font-weight:bold;
+               ">
+                            Open Expense
+                        </a>
+                    </div>
 
-        <p>Please review it in the system.</p>
+                    <p>
+                        Hello
+                        <t t-out="object._get_user_by_state().name if object._get_user_by_state() else ''"/>,
+                    </p>
 
-        <p>
-            You can view the expense directly here:
-            <a t-att-href="'/web#id=%s&amp;model=expense.expense&amp;view_type=form' % object.id">
-                Open Expense
-            </a>
-        </p>
-    </div>
-</field>
+                    <p>
+                        Expense
+                        <strong t-out="object.seq"/>
+                        is waiting for your approval.
+                    </p>
+
+                    <p>Please review it in the system.</p>
+
+                </div>
+            </field>
         </record>
 
         <!--        Financial Expense    -->
@@ -50,30 +59,40 @@
                 {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}
             </field>
 
-     <field name="body_html" type="html">
-    <div>
-        <p>
-            Hello
-            <t t-out="object._get_user_by_state().name if object._get_user_by_state() else ''"/>,
-        </p>
+            <field name="body_html" type="html">
+                <div>
 
-        <p>
-            Expense
-            <strong t-out="object.seq"/>
-            is waiting for your approval.
-        </p>
+                    <!-- BUTTON TOP -->
+                    <div style="text-align:center; margin-bottom:20px;">
+                        <a t-att-href="'/web#id=%s&amp;model=financial.expense&amp;view_type=form' % object.id"
+                           style="
+                    background-color:#875A7B;
+                    color:white;
+                    padding:10px 20px;
+                    text-decoration:none;
+                    border-radius:5px;
+                    display:inline-block;
+                    font-weight:bold;
+               ">
+                            Open Expense
+                        </a>
+                    </div>
 
-        <p>Please review it in the system.</p>
+                    <p>
+                        Hello
+                        <t t-out="object._get_user_by_state().name if object._get_user_by_state() else ''"/>,
+                    </p>
 
-        <p>
-            You can view the expense directly here:
-            <a t-att-href="'/web#id=%s&amp;model=expense.expense&amp;view_type=form' % object.id">
-                Open Expense
-            </a>
-        </p>
-    </div>
-</field>
+                    <p>
+                        Expense
+                        <strong t-out="object.seq"/>
+                        is waiting for your approval.
+                    </p>
 
+                    <p>Please review it in the system.</p>
+
+                </div>
+            </field>
         </record>
         <!--        Refuse mail       -->
         <!--        Expense Expense       -->
@@ -82,38 +101,46 @@
             <field name="name">Expense Refuse Notification</field>
             <field name="model_id" ref="model_expense_expense"/>
 
-            <field name="subject">
-                Expense {{ object.seq }} requires your action
-            </field>
+            <field name="subject">Expense {{ object.seq }} requires your action</field>
 
             <field name="email_to">
                 {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}
             </field>
 
-               <field name="body_html" type="html">
-    <div>
-        <p>
-            Hello
-            <t t-out="object._get_user_by_state().name if object._get_user_by_state() else ''"/>,
-        </p>
+            <field name="body_html" type="html">
+                <div>
 
-        <p>
-            Expense
-            <strong t-out="object.seq"/>
-            is waiting for your approval.
-        </p>
+                    <!-- BUTTON TOP -->
+                    <div style="text-align:center; margin-bottom:20px;">
+                        <a t-att-href="'/web#id=%s&amp;model=expense.expense&amp;view_type=form' % object.id"
+                           style="
+                    background-color:#875A7B;
+                    color:white;
+                    padding:10px 20px;
+                    text-decoration:none;
+                    border-radius:5px;
+                    display:inline-block;
+                    font-weight:bold;
+               ">
+                            Open Expense
+                        </a>
+                    </div>
 
-        <p>Please review it in the system.</p>
+                    <p>
+                        Hello
+                        <t t-out="object._get_user_by_state().name if object._get_user_by_state() else ''"/>,
+                    </p>
 
-        <p>
-            You can view the expense directly here:
-            <a t-att-href="'/web#id=%s&amp;model=expense.expense&amp;view_type=form' % object.id">
-                Open Expense
-            </a>
-        </p>
-    </div>
-</field>
+                    <p>
+                        Expense
+                        <strong t-out="object.seq"/>
+                        is waiting for your approval.
+                    </p>
 
+                    <p>Please review it in the system.</p>
+
+                </div>
+            </field>
 
         </record>
 
@@ -123,38 +150,46 @@
             <field name="name">Expense Refuse Notification</field>
             <field name="model_id" ref="model_financial_expense"/>
 
-            <field name="subject">
-                Expense {{ object.seq }} requires your action
-            </field>
+            <field name="subject">Expense {{ object.seq }} requires your action</field>
 
             <field name="email_to">
                 {{ object._get_user_by_state().email if object._get_user_by_state() else '' }}
             </field>
 
-                <field name="body_html" type="html">
-    <div>
-        <p>
-            Hello
-            <t t-out="object._get_user_by_state().name if object._get_user_by_state() else ''"/>,
-        </p>
+            <field name="body_html" type="html">
+                <div>
 
-        <p>
-            Expense
-            <strong t-out="object.seq"/>
-            is waiting for your approval.
-        </p>
+                    <!-- BUTTON TOP -->
+                    <div style="text-align:center; margin-bottom:20px;">
+                        <a t-att-href="'/web#id=%s&amp;model=financial.expense&amp;view_type=form' % object.id"
+                           style="
+                    background-color:#875A7B;
+                    color:white;
+                    padding:10px 20px;
+                    text-decoration:none;
+                    border-radius:5px;
+                    display:inline-block;
+                    font-weight:bold;
+               ">
+                            Open Expense
+                        </a>
+                    </div>
 
-        <p>Please review it in the system.</p>
+                    <p>
+                        Hello
+                        <t t-out="object._get_user_by_state().name if object._get_user_by_state() else ''"/>,
+                    </p>
 
-        <p>
-            You can view the expense directly here:
-            <a t-att-href="'/web#id=%s&amp;model=expense.expense&amp;view_type=form' % object.id">
-                Open Expense
-            </a>
-        </p>
-    </div>
-</field>
+                    <p>
+                        Expense
+                        <strong t-out="object.seq"/>
+                        is waiting for your approval.
+                    </p>
 
+                    <p>Please review it in the system.</p>
+
+                </div>
+            </field>
 
         </record>
 
