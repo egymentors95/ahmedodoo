@@ -8,6 +8,12 @@
         </record>
         <!--                                    Privilege                                -->
 
+        <record model="res.groups.privilege" id="financial_expense_privilege_admin">
+            <field name="name">Administrator</field>
+            <field name="sequence">10</field>
+            <field name="category_id" ref="add_menu_exp_account.module_category_financial_expense"/>
+        </record>
+
         <record model="res.groups.privilege" id="financial_expense_privilege_user">
             <field name="name">Financial Expenses</field>
             <field name="sequence">20</field>
@@ -52,6 +58,12 @@
         </record>
 
         <!--                                    Groups                                -->
+
+        <record id="group_financial_expense_admin" model="res.groups">
+            <field name="name">Admin</field>
+            <field name="sequence">1</field>
+            <field name="privilege_id" ref="financial_expense_privilege_admin"/>
+        </record>
 
         <record id="group_financial_expense_user" model="res.groups">
             <field name="name">User</field>

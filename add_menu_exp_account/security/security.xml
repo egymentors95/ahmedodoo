@@ -127,6 +127,11 @@
             <field name="sequence">180</field>
             <field name="category_id" ref="add_menu_exp_account.module_category_expense"/>
         </record>
+        <record model="res.groups.privilege" id="expense_privilege_adminstrator">
+            <field name="name">Administrator</field>
+            <field name="sequence">20</field>
+            <field name="category_id" ref="add_menu_exp_account.module_category_expense"/>
+        </record>
         <!--    _____________groups for buttons_______________________________    -->
         <record id="group_creator" model="res.groups">
             <field name="name">User</field>
@@ -175,6 +180,11 @@
         <record id="group_account2" model="res.groups">
             <field name="name">User</field>
             <field name="privilege_id" ref="expense_privilege_account2"/>
+        </record>
+
+        <record id="group_expense_adminstrator" model="res.groups">
+            <field name="name">Admin</field>
+            <field name="privilege_id" ref="expense_privilege_adminstrator"/>
         </record>
 
 

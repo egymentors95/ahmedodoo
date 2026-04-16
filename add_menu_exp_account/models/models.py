@@ -187,7 +187,8 @@ class Expense(models.Model):
 
     def write(self, vals):
         user = self.env.user
-        print('user', user)
+        if user.has_group('add_menu_exp_account.group_expense_adminstrator'):
+            return super().write(vals)
 
         for rec in self:
             print('rec._user_id', rec.user_id.name)
@@ -488,7 +489,7 @@ class ExpenseLine(models.Model):
     price_unit = fields.Float(string="Price", required=True, )
     tax_ids = fields.Many2many(comodel_name="account.tax", string="Taxes", )
     price_subtotal = fields.Float(string="Subtotal", required=False, )
-    vat_value = fields.Float(string='Vat Value', compute='_get_total_vat', store=True)
+    vat_value = fields.Float(string='Tax Amount', compute='_get_total_vat', store=True)
     attachment_ids = fields.Many2many(comodel_name='ir.attachment', string='Attachments', )
 
 
@@ -498,7 +499,7 @@ class ExpenseLine(models.Model):
             t = 0
             for any_line in rec.tax_ids:
                 t = t + any_line.amount
-            taxes = (t / 100) * rec.price_subtotal
+            taxes = (t / 100) * rec.quantity * rec.price_unit
             rec.vat_value = taxes
 
     @api.onchange('product_ids')
