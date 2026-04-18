@@ -19,11 +19,24 @@
                 </page>
                 <page string="Expense Manager">
                     <group>
-                        <group>
-                            <field name="manager_id"/>
-                            <field name="financial_manager_id"/>
+                        <group string="Expense Manager">
+                            <field name="direct_manager"/>
+                            <field name="administration_management"/>
+                            <field name="chief_acc"/>
+                            <field name="cfo"/>
+                            <field name="upload_bank"/>
+                            <field name="approve"/>
+                            <field name="account2"/>
                         </group>
-                        <group></group>
+                        <group string="Financial Expense Manager">
+                            <field name="financial_chief_acc"/>
+                            <field name="financial_cfo"/>
+                            <field name="financial_upload_bank"/>
+                            <field name="financial_approve"/>
+                            <field name="financial_account2"/>
+
+
+                        </group>
                     </group>
                 </page>
             </xpath>

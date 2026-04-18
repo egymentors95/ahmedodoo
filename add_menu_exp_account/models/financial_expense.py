@@ -40,75 +40,24 @@ class FinancialExpense(models.Model):
     cfo = fields.Many2one(comodel_name='res.users', string='CFO')
     upload_bank = fields.Many2one(comodel_name='res.users', string='Upload Bank')
     approve = fields.Many2one(comodel_name='res.users', string='Approve')
-    account2 = fields.Many2one(comodel_name='res.users', string='Accounts 2')
+    account2 = fields.Many2one(comodel_name='res.users', string='Accounts')
 
     def _fix_workflow_users(self):
         for rec in self:
             user = self.env.user
-                    # Groups
-            group_financial_creator = self.env.user.has_group('add_menu_exp_account.group_financial_creator')
-            group_financial_chief_acc = self.env.user.has_group('add_menu_exp_account.group_financial_chief_acc')
-            group_financial_cfo = self.env.user.has_group('add_menu_exp_account.group_financial_cfo')
-            group_financial_upload_bank = self.env.user.has_group('add_menu_exp_account.group_financial_upload_bank')
-            group_financial_approve = self.env.user.has_group('add_menu_exp_account.group_financial_approve')
-            group_financial_account2 = self.env.user.has_group('add_menu_exp_account.group_financial_account2')
 
-            if group_financial_creator  and group_financial_chief_acc and  group_financial_cfo and group_financial_upload_bank and group_financial_approve and group_financial_account2:
-                rec.user_id = user.id
-                rec.chief_acc = user.id
-                rec.cfo = user.id
-                rec.upload_bank = user.id
-                rec.approve = user.id
-                rec.account2 = user.id
-            elif group_financial_creator and group_financial_chief_acc and group_financial_cfo and group_financial_upload_bank and group_financial_approve and not group_financial_account2:
-                rec.user_id = user.id
-                rec.chief_acc = user.id
-                rec.cfo = user.id
-                rec.upload_bank = user.id
-                rec.approve = user.id
-                rec.account2 = rec.approve.financial_manager_id.id
-            elif group_financial_creator  and group_financial_chief_acc and group_financial_cfo and group_financial_upload_bank and not group_financial_approve and not group_financial_account2:
-                rec.user_id = user.id
-                rec.chief_acc = user.id
-                rec.cfo = user.id
-                rec.upload_bank = user.id
-                rec.approve = rec.upload_bank.financial_manager_id.id
-                rec.account2 = rec.approve.financial_manager_id.id
-            elif group_financial_creator and group_financial_chief_acc and group_financial_cfo and not group_financial_upload_bank and not group_financial_approve and not group_financial_account2:
-                rec.user_id = user.id
-                rec.chief_acc = user.id
-                rec.cfo = user.id
-                rec.upload_bank = rec.cfo.financial_manager_id.id
-                rec.approve = rec.upload_bank.financial_manager_id.id
-                rec.account2 = rec.approve.financial_manager_id.id
-            elif group_financial_creator and group_financial_chief_acc and not group_financial_cfo and not group_financial_upload_bank and not group_financial_approve and not group_financial_account2:
-                rec.user_id = user.id
-                rec.chief_acc = user.id
-                rec.cfo = rec.chief_acc.financial_manager_id.id
-                rec.upload_bank = rec.cfo.financial_manager_id.id
-                rec.approve = rec.upload_bank.financial_manager_id.id
-                rec.account2 = rec.approve.financial_manager_id.id
-            elif group_financial_creator and not group_financial_chief_acc and not group_financial_cfo and not group_financial_upload_bank and not group_financial_approve and not group_financial_account2:
-                rec.user_id = user.id
-                rec.chief_acc = rec.user_id.financial_manager_id.id
-                rec.cfo = rec.chief_acc.financial_manager_id.id
-                rec.upload_bank = rec.cfo.financial_manager_id.id
-                rec.approve = rec.upload_bank.financial_manager_id.id
-                rec.account2 = rec.approve.financial_manager_id.id
-            elif group_financial_creator  and not group_financial_chief_acc and not group_financial_cfo and not group_financial_upload_bank and not group_financial_approve and not group_financial_account2:
-                rec.user_id = user.id
-                rec.chief_acc = rec.user_id.financial_manager_id.id
-                rec.cfo = rec.chief_acc.financial_manager_id.id
-                rec.upload_bank = rec.cfo.financial_manager_id.id
-                rec.approve = rec.upload_bank.financial_manager_id.id
-                rec.account2 = rec.approve.financial_manager_id.id
-            elif group_financial_creator and not group_financial_chief_acc and not group_financial_cfo and not group_financial_upload_bank and not group_financial_approve and group_financial_account2:
-                rec.user_id = user.id
-                rec.chief_acc = rec.user_id.financial_manager_id.id
-                rec.cfo = rec.chief_acc.financial_manager_id.id
-                rec.upload_bank = rec.cfo.financial_manager_id.id
-                rec.approve = rec.upload_bank.financial_manager_id.id
-                rec.account2 = user.id
+            if user:
+                rec.chief_acc = user.financial_chief_acc.id if user.financial_chief_acc else False
+                rec.cfo = user.financial_cfo.id if user.financial_cfo else False
+                rec.upload_bank = user.financial_upload_bank.id if user.financial_upload_bank else False
+                rec.approve = user.financial_approve.id if user.financial_approve else False
+                rec.account2 = user.financial_account2.id if user.financial_account2 else False
+            else:
+                rec.chief_acc = False
+                rec.cfo = False
+                rec.upload_bank = False
+                rec.approve = False
+                rec.account2 = False
 
 
     @api.depends('user_id')

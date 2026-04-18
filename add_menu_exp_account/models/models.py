@@ -47,119 +47,33 @@ class Expense(models.Model):
     # ========================== Users =============================
     user_id = fields.Many2one(comodel_name='res.users', string='User', default=lambda self: self.env.user, copy=False)
     direct_manager = fields.Many2one(comodel_name='res.users', string='Direct Manager')
-    # account1 = fields.Many2one(comodel_name='res.users', string='Accounts 1')
     administration_management = fields.Many2one(comodel_name='res.users', string='Administration Management')
     chief_acc = fields.Many2one(comodel_name='res.users', string='Chief Acc')
     cfo = fields.Many2one(comodel_name='res.users', string='CFO')
     upload_bank = fields.Many2one(comodel_name='res.users', string='Upload Bank')
     approve = fields.Many2one(comodel_name='res.users', string='Approve')
-    account2 = fields.Many2one(comodel_name='res.users', string='Accounts 2')
+    account2 = fields.Many2one(comodel_name='res.users', string='Accounts')
 
     def _fix_workflow_users(self):
         for rec in self:
             user = self.env.user
-                    # Groups
-            group_creator = self.env.user.has_group('add_menu_exp_account.group_creator')
-            group_direct_manager = self.env.user.has_group('add_menu_exp_account.group_direct_manager')
-            # group_account1 = self.env.user.has_group('add_menu_exp_account.group_account1')
-            group_administration_management = self.env.user.has_group('add_menu_exp_account.group_administration_management')
-            group_chief_acc = self.env.user.has_group('add_menu_exp_account.group_chief_acc')
-            group_cfo = self.env.user.has_group('add_menu_exp_account.group_cfo')
-            group_upload_bank = self.env.user.has_group('add_menu_exp_account.group_upload_bank')
-            group_approve = self.env.user.has_group('add_menu_exp_account.approve')
-            group_account2 = self.env.user.has_group('add_menu_exp_account.group_account2')
 
-            if group_creator and group_direct_manager  and group_administration_management and group_chief_acc and  group_cfo and group_upload_bank and group_approve and group_account2:
-                rec.user_id = user.id
-                rec.direct_manager = user.id
-                rec.administration_management = user.id
-                rec.chief_acc = user.id
-                rec.cfo = user.id
-                rec.upload_bank = user.id
-                rec.approve = user.id
-                rec.account2 = user.id
-            elif group_creator and group_direct_manager  and group_administration_management and group_chief_acc and group_cfo and group_upload_bank and group_approve and not group_account2:
-                rec.user_id = user.id
-                rec.direct_manager = user.id
-                rec.administration_management = user.id
-                rec.chief_acc = user.id
-                rec.cfo = user.id
-                rec.upload_bank = user.id
-                rec.approve = user.id
-                rec.account2 = rec.approve.manager_id.id
-            elif group_creator and group_direct_manager and group_administration_management and group_chief_acc and group_cfo and group_upload_bank and not group_approve and not group_account2:
-                rec.user_id = user.id
-                rec.direct_manager = user.id
-                rec.administration_management = user.id
-                rec.chief_acc = user.id
-                rec.cfo = user.id
-                rec.upload_bank = user.id
-                rec.approve = rec.upload_bank.manager_id.id
-                rec.account2 = rec.approve.manager_id.id
-            elif group_creator and group_direct_manager  and group_administration_management and group_chief_acc and group_cfo and not group_upload_bank and not group_approve and not group_account2:
-                rec.user_id = user.id
-                rec.direct_manager = user.id
-                rec.administration_management = user.id
-                rec.chief_acc = user.id
-                rec.cfo = user.id
-                rec.upload_bank = rec.cfo.manager_id.id
-                rec.approve = rec.upload_bank.manager_id.id
-                rec.account2 = rec.approve.manager_id.id
-            elif group_creator and group_direct_manager  and group_administration_management and group_chief_acc and not group_cfo and not group_upload_bank and not group_approve and not group_account2:
-                rec.user_id = user.id
-                rec.direct_manager = user.id
-                rec.administration_management = user.id
-                rec.chief_acc = user.id
-                rec.cfo = rec.chief_acc.manager_id.id
-                rec.upload_bank = rec.cfo.manager_id.id
-                rec.approve = rec.upload_bank.manager_id.id
-                rec.account2 = rec.approve.manager_id.id
-            elif group_creator and group_direct_manager and group_administration_management and not group_chief_acc and not group_cfo and not group_upload_bank and not group_approve and not group_account2:
-                rec.user_id = user.id
-                rec.direct_manager = user.id
-                rec.administration_management = user.id
-                rec.chief_acc = rec.administration_management.manager_id.id
-                rec.cfo = rec.chief_acc.manager_id.id
-                rec.upload_bank = rec.cfo.manager_id.id
-                rec.approve = rec.upload_bank.manager_id.id
-                rec.account2 = rec.approve.manager_id.id
-            elif group_creator and group_direct_manager  and not group_administration_management and not group_chief_acc and not group_cfo and not group_upload_bank and not group_approve and not group_account2:
-                rec.user_id = user.id
-                rec.direct_manager = user.id
-                rec.administration_management = rec.direct_manager.manager_id.id
-                rec.chief_acc = rec.administration_management.manager_id.id
-                rec.cfo = rec.chief_acc.manager_id.id
-                rec.upload_bank = rec.cfo.manager_id.id
-                rec.approve = rec.upload_bank.manager_id.id
-                rec.account2 = rec.approve.manager_id.id
-            elif group_creator and group_direct_manager and not group_administration_management and not group_chief_acc and not group_cfo and not group_upload_bank and not group_approve and not group_account2:
-                rec.user_id = user.id
-                rec.direct_manager = user.id
-                rec.administration_management = rec.direct_manager.manager_id.id
-                rec.chief_acc = rec.administration_management.manager_id.id
-                rec.cfo = rec.chief_acc.manager_id.id
-                rec.upload_bank = rec.cfo.manager_id.id
-                rec.approve = rec.upload_bank.manager_id.id
-                rec.account2 = rec.approve.manager_id.id
-            elif group_creator and not group_direct_manager and not group_administration_management and not group_chief_acc and not group_cfo and not group_upload_bank and not group_approve and not group_account2:
-                rec.user_id = user.id
-                rec.direct_manager = rec.user_id.manager_id.id
-                rec.administration_management = rec.direct_manager.manager_id.id
-                rec.chief_acc = rec.administration_management.manager_id.id
-                rec.cfo = rec.chief_acc.manager_id.id
-                rec.upload_bank = rec.cfo.manager_id.id
-                rec.approve = rec.upload_bank.manager_id.id
-                rec.account2 = rec.approve.manager_id.id
-            elif group_creator and group_direct_manager and not group_administration_management and not group_chief_acc and not group_cfo  and not group_upload_bank and not group_approve and group_account2:
-                rec.user_id = user.id
-                rec.direct_manager = user.id
-                rec.administration_management = rec.direct_manager.manager_id.id
-                rec.chief_acc = rec.administration_management.manager_id.id
-                rec.cfo = rec.chief_acc.manager_id.id
-                rec.upload_bank = rec.cfo.manager_id.id
-                rec.approve = rec.upload_bank.manager_id.id
-                rec.account2 = user.id
-
+            if user:
+                rec.direct_manager = user.direct_manager.id if user.direct_manager else False
+                rec.administration_management = user.administration_management.id if user.administration_management else False
+                rec.chief_acc = user.chief_acc.id if user.chief_acc else False
+                rec.cfo = user.cfo.id if user.cfo else False
+                rec.upload_bank = user.upload_bank.id if user.upload_bank else False
+                rec.approve = user.approve.id if user.approve else False
+                rec.account2 = user.account2.id if user.account2 else False
+            else:
+                rec.direct_manager = False
+                rec.administration_management = False
+                rec.chief_acc = False
+                rec.cfo = False
+                rec.upload_bank = False
+                rec.approve = False
+                rec.account2 = False
 
 
 
