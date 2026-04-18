@@ -11,7 +11,7 @@
                                 class="oe_highlight"
                                 type="object"
                                 invisible="state != 'draft'"
-                                groups="add_menu_exp_account.group_financial_account1,add_menu_exp_account.group_financial_expense_admin"/>
+                                groups="add_menu_exp_account.group_financial_creator,add_menu_exp_account.group_financial_expense_admin"/>
 
                         <button name="to_cfo" string="To CFO"
                                 class="oe_highlight"
