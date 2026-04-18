@@ -191,24 +191,31 @@ class Expense(models.Model):
             return super().write(vals)
 
         for rec in self:
-            print('rec._user_id', rec.user_id.name)
 
             if rec.state == 'draft':
                 if rec.user_id != user:
-                    print('draft')
                     raise AccessError("Only creator can edit in Draft")
 
             elif rec.state == 'direct_manager':
-                if rec.direct_manager != user:
+                if user.has_group('add_menu_exp_account.group_chief_acc') or user.has_group('add_menu_exp_account.group_administration_management'):
+                    continue
+
+                elif rec.direct_manager != user:
                     raise AccessError("Only Direct Manager can edit")
 
 
             elif rec.state == 'administration_management':
-                if rec.administration_management != user:
+                if user.has_group('add_menu_exp_account.group_chief_acc'):
+                    continue
+
+                elif rec.administration_management != user:
                     raise AccessError("Only Administration Management can edit")
 
             elif rec.state == 'chief_acc':
-                if rec.chief_acc != user:
+                if user.has_group('add_menu_exp_account.group_chief_acc'):
+                    continue
+
+                elif rec.chief_acc != user:
                     raise AccessError("Only Chief Accountant can edit")
 
 

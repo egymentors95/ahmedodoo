@@ -23,12 +23,11 @@ class FinancialExpense(models.Model):
     state = fields.Selection(selection=
     [
         ('draft', 'creator'),
-        ('account1', 'Accounts 1'),
         ('chief_acc', 'Chief Acc'),
         ('cfo', 'CFO'),
         ('upload_bank', 'Upload Bank'),
         ('approve', 'Approve'),
-        ('account2', 'Accounts 2'),
+        ('account2', 'Accounts'),
 
     ], required=False, default='draft', tracking=True)
     amount_taxed = fields.Float(string="Un Taxed Amount", tracking=True)
@@ -37,7 +36,6 @@ class FinancialExpense(models.Model):
     department_id = fields.Many2one(comodel_name='user.department', compute='_get_department', store=True)
     # ========================== Users =============================
     user_id = fields.Many2one(comodel_name='res.users', string='User', default=lambda self: self.env.user, copy=False)
-    account1 = fields.Many2one(comodel_name='res.users', string='Accounts 1')
     chief_acc = fields.Many2one(comodel_name='res.users', string='Chief Acc')
     cfo = fields.Many2one(comodel_name='res.users', string='CFO')
     upload_bank = fields.Many2one(comodel_name='res.users', string='Upload Bank')
@@ -49,73 +47,64 @@ class FinancialExpense(models.Model):
             user = self.env.user
                     # Groups
             group_financial_creator = self.env.user.has_group('add_menu_exp_account.group_financial_creator')
-            group_financial_account1 = self.env.user.has_group('add_menu_exp_account.group_financial_account1')
             group_financial_chief_acc = self.env.user.has_group('add_menu_exp_account.group_financial_chief_acc')
             group_financial_cfo = self.env.user.has_group('add_menu_exp_account.group_financial_cfo')
             group_financial_upload_bank = self.env.user.has_group('add_menu_exp_account.group_financial_upload_bank')
             group_financial_approve = self.env.user.has_group('add_menu_exp_account.group_financial_approve')
             group_financial_account2 = self.env.user.has_group('add_menu_exp_account.group_financial_account2')
 
-            if group_financial_creator  and group_financial_account1 and group_financial_chief_acc and  group_financial_cfo and group_financial_upload_bank and group_financial_approve and group_financial_account2:
+            if group_financial_creator  and group_financial_chief_acc and  group_financial_cfo and group_financial_upload_bank and group_financial_approve and group_financial_account2:
                 rec.user_id = user.id
-                rec.account1 = user.id
                 rec.chief_acc = user.id
                 rec.cfo = user.id
                 rec.upload_bank = user.id
                 rec.approve = user.id
                 rec.account2 = user.id
-            elif group_financial_creator and group_financial_account1 and group_financial_chief_acc and group_financial_cfo and group_financial_upload_bank and group_financial_approve and not group_financial_account2:
+            elif group_financial_creator and group_financial_chief_acc and group_financial_cfo and group_financial_upload_bank and group_financial_approve and not group_financial_account2:
                 rec.user_id = user.id
-                rec.account1 = user.id
                 rec.chief_acc = user.id
                 rec.cfo = user.id
                 rec.upload_bank = user.id
                 rec.approve = user.id
                 rec.account2 = rec.approve.financial_manager_id.id
-            elif group_financial_creator and group_financial_account1 and group_financial_chief_acc and group_financial_cfo and group_financial_upload_bank and not group_financial_approve and not group_financial_account2:
+            elif group_financial_creator  and group_financial_chief_acc and group_financial_cfo and group_financial_upload_bank and not group_financial_approve and not group_financial_account2:
                 rec.user_id = user.id
-                rec.account1 = user.id
                 rec.chief_acc = user.id
                 rec.cfo = user.id
                 rec.upload_bank = user.id
                 rec.approve = rec.upload_bank.financial_manager_id.id
                 rec.account2 = rec.approve.financial_manager_id.id
-            elif group_financial_creator and group_financial_account1 and group_financial_chief_acc and group_financial_cfo and not group_financial_upload_bank and not group_financial_approve and not group_financial_account2:
+            elif group_financial_creator and group_financial_chief_acc and group_financial_cfo and not group_financial_upload_bank and not group_financial_approve and not group_financial_account2:
                 rec.user_id = user.id
-                rec.account1 = user.id
                 rec.chief_acc = user.id
                 rec.cfo = user.id
                 rec.upload_bank = rec.cfo.financial_manager_id.id
                 rec.approve = rec.upload_bank.financial_manager_id.id
                 rec.account2 = rec.approve.financial_manager_id.id
-            elif group_financial_creator and group_financial_account1 and group_financial_chief_acc and not group_financial_cfo and not group_financial_upload_bank and not group_financial_approve and not group_financial_account2:
+            elif group_financial_creator and group_financial_chief_acc and not group_financial_cfo and not group_financial_upload_bank and not group_financial_approve and not group_financial_account2:
                 rec.user_id = user.id
-                rec.account1 = user.id
                 rec.chief_acc = user.id
                 rec.cfo = rec.chief_acc.financial_manager_id.id
                 rec.upload_bank = rec.cfo.financial_manager_id.id
                 rec.approve = rec.upload_bank.financial_manager_id.id
                 rec.account2 = rec.approve.financial_manager_id.id
-            elif group_financial_creator and group_financial_account1 and not group_financial_chief_acc and not group_financial_cfo and not group_financial_upload_bank and not group_financial_approve and not group_financial_account2:
+            elif group_financial_creator and not group_financial_chief_acc and not group_financial_cfo and not group_financial_upload_bank and not group_financial_approve and not group_financial_account2:
                 rec.user_id = user.id
-                rec.account1 = user.id
-                rec.chief_acc = rec.account1.financial_manager_id.id
+                rec.chief_acc = rec.user_id.financial_manager_id.id
                 rec.cfo = rec.chief_acc.financial_manager_id.id
                 rec.upload_bank = rec.cfo.financial_manager_id.id
                 rec.approve = rec.upload_bank.financial_manager_id.id
                 rec.account2 = rec.approve.financial_manager_id.id
-            elif group_financial_creator and not group_financial_account1 and not group_financial_chief_acc and not group_financial_cfo and not group_financial_upload_bank and not group_financial_approve and not group_financial_account2:
+            elif group_financial_creator  and not group_financial_chief_acc and not group_financial_cfo and not group_financial_upload_bank and not group_financial_approve and not group_financial_account2:
                 rec.user_id = user.id
-                rec.account1 = rec.user_id.financial_manager_id.id
-                rec.chief_acc = rec.account1.financial_manager_id.id
+                rec.chief_acc = rec.user_id.financial_manager_id.id
                 rec.cfo = rec.chief_acc.financial_manager_id.id
                 rec.upload_bank = rec.cfo.financial_manager_id.id
                 rec.approve = rec.upload_bank.financial_manager_id.id
                 rec.account2 = rec.approve.financial_manager_id.id
-            elif group_financial_creator and group_financial_account1 and not group_financial_chief_acc and not group_financial_cfo and not group_financial_upload_bank and not group_financial_approve and group_financial_account2:
+            elif group_financial_creator and not group_financial_chief_acc and not group_financial_cfo and not group_financial_upload_bank and not group_financial_approve and group_financial_account2:
                 rec.user_id = user.id
-                rec.account1 = user.id
-                rec.chief_acc = rec.account1.financial_manager_id.id
+                rec.chief_acc = rec.user_id.financial_manager_id.id
                 rec.cfo = rec.chief_acc.financial_manager_id.id
                 rec.upload_bank = rec.cfo.financial_manager_id.id
                 rec.approve = rec.upload_bank.financial_manager_id.id
@@ -135,7 +124,6 @@ class FinancialExpense(models.Model):
     def _get_user_by_state(self):
         self.ensure_one()
         return {
-            'account1': self.account1,
             'chief_acc': self.chief_acc,
             'cfo': self.cfo,
             'upload_bank': self.upload_bank,
@@ -156,10 +144,6 @@ class FinancialExpense(models.Model):
                     print('draft')
                     raise AccessError("Only creator can edit in Draft")
 
-
-            elif rec.state == 'account1':
-                if rec.account1 != user:
-                    raise AccessError("Only Accounts 1 can edit")
 
             elif rec.state == 'chief_acc':
                 if rec.chief_acc != user:
@@ -242,11 +226,6 @@ class FinancialExpense(models.Model):
     # =======================================================================
 
 
-    def to_account1(self):
-        for rec in self:
-            rec.state = 'account1'
-            rec._send_stage_email()
-
 
     def to_chief_acc(self):
         for rec in self:
@@ -276,17 +255,12 @@ class FinancialExpense(models.Model):
     # ========================================================================
     # Refuse
     # =======================================================================
-    def refuse_account1(self):
-        for rec in self:
-            if rec.state == 'account1':
-                rec.state = 'draft'
-                rec._send_refuse_email()
 
 
     def refuse_chief_acc(self):
         for rec in self:
             if rec.state == 'chief_acc':
-                rec.state = 'account1'
+                rec.state = 'draft'
                 rec._send_refuse_email()
 
     def refuse_cfo(self):
