@@ -205,7 +205,7 @@ class Expense(models.Model):
 
 
             elif rec.state == 'administration_management':
-                if user.has_group('add_menu_exp_account.group_chief_acc'):
+                if user.has_group('add_menu_exp_account.group_chief_acc') or user.has_group('add_menu_exp_account.group_administration_management'):
                     continue
 
                 elif rec.administration_management != user:
