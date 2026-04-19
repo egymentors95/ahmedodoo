@@ -79,7 +79,7 @@
                                 type="object"
                                 invisible="state != 'approve'"
                                 groups="add_menu_exp_account.group_approve,add_menu_exp_account.group_expense_adminstrator"/>
-                        <button name="refuse_approve" string="Refuse"
+                        <button name="refuse_account2" string="Refuse"
                                 class="btn-danger"
                                 type="object"
                                 invisible="state != 'account2'"
@@ -167,12 +167,11 @@ y                                        <field name="administration_management"
                     <field name="seq" readonly="1"/>
                     <field name="user_id"/>
                     <field name="company_id"/>
-                    <field name="name"/>
+                    <field name="state"/>
                     <field name="expense_date"/>
                     <field name="total" sum="Total"/>
                     <field name="amount_taxed" sum="Un Taxed"/>
                     <field name="tax" sum="Tax"/>
-                    <field name="state"/>
                 </list>
             </field>
         </record>

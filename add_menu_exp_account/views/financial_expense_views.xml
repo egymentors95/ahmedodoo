@@ -142,12 +142,11 @@
                     <field name="seq" readonly="1"/>
                     <field name="user_id"/>
                     <field name="company_id"/>
-                    <field name="name"/>
+                    <field name="state"/>
                     <field name="expense_date"/>
                     <field name="total" sum="Total"/>
                     <field name="amount_taxed" sum="Un Taxed"/>
                     <field name="tax" sum="Tax"/>
-                    <field name="state"/>
                 </list>
             </field>
         </record>
