@@ -300,11 +300,11 @@ class Expense(models.Model):
                 rec.state = 'upload_bank'
                 rec._send_refuse_email()
 
-    # def refuse_account2(self):
-    #     for rec in self:
-    #         if rec.state == 'account2':
-    #             rec.state = 'cfo'
-    #             rec._send_refuse_email()
+    def refuse_account2(self):
+        for rec in self:
+            if rec.state == 'account2':
+                rec.state = 'approve'
+                rec._send_refuse_email()
 
 
 

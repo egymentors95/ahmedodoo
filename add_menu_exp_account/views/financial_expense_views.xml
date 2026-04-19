@@ -55,6 +55,11 @@
                                 type="object"
                                 invisible="state != 'approve'"
                                 groups="add_menu_exp_account.group_financial_approve,add_menu_exp_account.group_financial_expense_admin"/>
+                        <button name="refuse_account" string="Refuse"
+                                class="btn-danger"
+                                type="object"
+                                invisible="state != 'account2'"
+                                groups="add_menu_exp_account.group_financial_expense_admin"/>
 
 
                         <field name="state" widget="statusbar"/>
@@ -142,6 +147,7 @@
                     <field name="total" sum="Total"/>
                     <field name="amount_taxed" sum="Un Taxed"/>
                     <field name="tax" sum="Tax"/>
+                    <field name="state"/>
                 </list>
             </field>
         </record>
@@ -160,8 +166,10 @@
         </record>
 
 
-        <menuitem id="financial_expense_view_menu" name="Financial Expenses" parent="add_menu_exp_account.Expense_view_menu_ID_categ"
-                  action="financial_expense_view_action" sequence="20" groups="add_menu_exp_account.group_financial_expense_user"/>
+        <menuitem id="financial_expense_view_menu" name="Financial Expenses"
+                  parent="add_menu_exp_account.Expense_view_menu_ID_categ"
+                  action="financial_expense_view_action" sequence="20"
+                  groups="add_menu_exp_account.group_financial_expense_user"/>
 
 
     </data>

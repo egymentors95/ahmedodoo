@@ -79,6 +79,11 @@
                                 type="object"
                                 invisible="state != 'approve'"
                                 groups="add_menu_exp_account.group_approve,add_menu_exp_account.group_expense_adminstrator"/>
+                        <button name="refuse_approve" string="Refuse"
+                                class="btn-danger"
+                                type="object"
+                                invisible="state != 'account2'"
+                                groups="add_menu_exp_account.group_expense_adminstrator"/>
 
 
                         <field name="state" widget="statusbar"/>
@@ -167,6 +172,7 @@ y                                        <field name="administration_management"
                     <field name="total" sum="Total"/>
                     <field name="amount_taxed" sum="Un Taxed"/>
                     <field name="tax" sum="Tax"/>
+                    <field name="state"/>
                 </list>
             </field>
         </record>

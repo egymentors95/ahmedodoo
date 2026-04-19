@@ -230,6 +230,12 @@ class FinancialExpense(models.Model):
                 rec.state = 'upload_bank'
                 rec._send_refuse_email()
 
+    def refuse_account(self):
+        for rec in self:
+            if rec.state == 'account2':
+                rec.state = 'approve'
+                rec._send_refuse_email()
+
     @api.depends(
         'expenses_ids.quantity',
         'expenses_ids.price_unit',
