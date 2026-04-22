@@ -117,7 +117,9 @@
                                         <field name="product_ids" options="{'no_create': True}"/>
                                         <field name="name" optional="show"/>
                                         <field name="vendor_id" optional="show"/>
-                                        <field name="attachment_ids" widget="many2many_binary" optional="show"
+                                     <field name="attachment_ids"
+       widget="many2many_attachment_preview"
+       options="{'accepted_file_extensions': '.pdf,.jpg,.png', 'number_of_files': 10}" optional="show"
                                                readonly="parent.state not in ['draft', 'financial_manager']"/>
                                         <field name="quantity" optional="show"/>
                                         <field name="price_unit" optional="show"/>
