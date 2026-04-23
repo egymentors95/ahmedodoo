@@ -8,11 +8,12 @@ class ResUser(models.Model):
                 # Managers Expenses
     direct_manager = fields.Many2one(comodel_name='res.users', string='Direct Manager')
     administration_management = fields.Many2one(comodel_name='res.users', string='Administration Management')
+    account1 = fields.Many2one(comodel_name='res.users', string='Account1')
     chief_acc = fields.Many2one(comodel_name='res.users', string='Chief Acc')
     cfo = fields.Many2one(comodel_name='res.users', string='CFO')
     upload_bank = fields.Many2one(comodel_name='res.users', string='Upload Bank')
     approve = fields.Many2one(comodel_name='res.users', string='Approve')
-    account2 = fields.Many2one(comodel_name='res.users', string='Accounts')
+    account2 = fields.Many2one(comodel_name='res.users', string='Account2')
 
     # Managers Financial Expenses
     financial_chief_acc = fields.Many2one(comodel_name='res.users', string='Chief Acc')

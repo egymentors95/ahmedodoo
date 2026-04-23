@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api, _
+from odoo import models, fields, api
+from odoo.tools.translate import _
+
 from odoo.exceptions import UserError, AccessError
 from datetime import date
 
@@ -31,28 +33,37 @@ class Expense(models.Model):
     [
         ('draft', 'creator'),
         ('direct_manager', 'Direct Manager'),
-        # ('account1', 'Accounts 1'),
         ('administration_management', 'Administration Management'),
+        ('account1', 'Accounts 1'),
         ('chief_acc', 'Chief Acc'),
         ('cfo', 'CFO'),
         ('upload_bank', 'Upload Bank'),
         ('approve', 'Approve'),
-        ('account2', 'Accounts'),
+        ('account2', 'Account2'),
 
     ], required=False, default='draft', tracking=True)
     amount_taxed = fields.Float(string="Un Taxed Amount", tracking=True)
     seq = fields.Char(readonly=True, copy=False, default=lambda self: 'New')
     company_id = fields.Many2one(comodel_name='res.company', string='Company', default=lambda self: self.env.company)
     department_id = fields.Many2one(comodel_name='user.department', compute='_get_department', store=True)
+    vendor_id = fields.Many2one(comodel_name='res.partner', string='Vendors', domain=[('supplier_rank', '>', 0)], compute='_get_vendor_id', store=True)
+
     # ========================== Users =============================
     user_id = fields.Many2one(comodel_name='res.users', string='User', default=lambda self: self.env.user, copy=False)
     direct_manager = fields.Many2one(comodel_name='res.users', string='Direct Manager')
     administration_management = fields.Many2one(comodel_name='res.users', string='Administration Management')
+    account1 = fields.Many2one(comodel_name='res.users', string='Account1')
     chief_acc = fields.Many2one(comodel_name='res.users', string='Chief Acc')
     cfo = fields.Many2one(comodel_name='res.users', string='CFO')
     upload_bank = fields.Many2one(comodel_name='res.users', string='Upload Bank')
     approve = fields.Many2one(comodel_name='res.users', string='Approve')
-    account2 = fields.Many2one(comodel_name='res.users', string='Accounts')
+    account2 = fields.Many2one(comodel_name='res.users', string='Account2')
+
+    @api.depends('expenses_ids', 'expenses_ids.vendor_id')
+    def _get_vendor_id(self):
+        for rec in self:
+            rec.vendor_id = next((l.vendor_id for l in rec.expenses_ids if l.vendor_id), False)
+
 
     def _fix_workflow_users(self):
         for rec in self:
@@ -61,6 +72,7 @@ class Expense(models.Model):
             if user:
                 rec.direct_manager = user.direct_manager.id if user.direct_manager else False
                 rec.administration_management = user.administration_management.id if user.administration_management else False
+                rec.account1 = user.account1.id if user.account1 else False
                 rec.chief_acc = user.chief_acc.id if user.chief_acc else False
                 rec.cfo = user.cfo.id if user.cfo else False
                 rec.upload_bank = user.upload_bank.id if user.upload_bank else False
@@ -69,6 +81,7 @@ class Expense(models.Model):
             else:
                 rec.direct_manager = False
                 rec.administration_management = False
+                rec.account1 = False
                 rec.chief_acc = False
                 rec.cfo = False
                 rec.upload_bank = False
@@ -92,6 +105,7 @@ class Expense(models.Model):
         return {
             'direct_manager': self.direct_manager,
             'administration_management': self.administration_management,
+            'account1': self.account1,
             'chief_acc': self.chief_acc,
             'cfo': self.cfo,
             'upload_bank': self.upload_bank,
@@ -124,6 +138,10 @@ class Expense(models.Model):
 
                 elif rec.administration_management != user:
                     raise AccessError("Only Administration Management can edit")
+
+            elif rec.state == 'account1':
+                if rec.account1 != user:
+                    raise AccessError("Only CFO can edit")
 
             elif rec.state == 'chief_acc':
                 if user.has_group('add_menu_exp_account.group_chief_acc'):
@@ -166,30 +184,6 @@ class Expense(models.Model):
                     email_values={'email_to': email},
                     force_send=True
                 )
-    # def _send_stage_email(self):
-    #     template = self.env.ref('add_menu_exp_account.email_template_expense_stage')
-    #
-    #     for rec in self:
-    #         user = rec._get_user_by_state()
-    #
-    #         if user and user.email:
-    #             mail_values = {
-    #                 'subject': f'Expense {rec.seq} Approval',
-    #                 'body_html': f'''
-    #                                    <p>Hello {user.name},</p>
-    #                                    <p>Your expense <b>{rec.seq}</b> requires your action.</p>
-    #                                ''',
-    #                 'email_to': user.email,
-    #                 'email_from': self.env.user.email,
-    #             }
-    #
-    #             self.env['mail.mail'].sudo().create(mail_values).send()
-    #             # ✅ Optional: إضافة Activity
-    #             # rec.activity_schedule(
-    #             #     'mail.mail_activity_data_todo',
-    #             #     user_id=user.id,
-    #             #     summary="Expense Approval Required",
-    #             # )
 
     # =========================================
     # Send Refuse mail
@@ -236,6 +230,11 @@ class Expense(models.Model):
             rec.state = 'administration_management'
             rec._send_stage_email()
 
+    def to_account1(self):
+        for rec in self:
+            rec.state = 'account1'
+            rec._send_stage_email()
+
     def to_chief_acc(self):
         for rec in self:
             rec.state = 'chief_acc'
@@ -276,10 +275,16 @@ class Expense(models.Model):
                 rec.state = 'direct_manager'
                 rec._send_refuse_email()
 
+    def refuse_account1(self):
+        for rec in self:
+            if rec.state == 'account1':
+                rec.state = 'administration_management'
+                rec._send_refuse_email()
+
     def refuse_chief_acc(self):
         for rec in self:
             if rec.state == 'chief_acc':
-                rec.state = 'administration_management'
+                rec.state = 'account1'
                 rec._send_refuse_email()
 
     def refuse_cfo(self):

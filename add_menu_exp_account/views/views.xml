@@ -20,10 +20,17 @@
                                 invisible="state != 'direct_manager'"
                                 groups="add_menu_exp_account.group_direct_manager,add_menu_exp_account.group_expense_adminstrator"/>
 
-                        <button name="to_chief_acc" string="To Chief Accountant"
+                        <button name="to_account1" string="To Account1"
                                 class="oe_highlight"
                                 type="object"
                                 invisible="state != 'administration_management'"
+                                groups="add_menu_exp_account.group_account1,add_menu_exp_account.group_expense_adminstrator"/>
+
+
+                        <button name="to_chief_acc" string="To Chief Accountant"
+                                class="oe_highlight"
+                                type="object"
+                                invisible="state != 'account1'"
                                 groups="add_menu_exp_account.group_administration_management,add_menu_exp_account.group_expense_adminstrator"/>
 
                         <button name="to_cfo" string="To CFO"
@@ -59,6 +66,11 @@
                                 type="object"
                                 invisible="state != 'administration_management'"
                                 groups="add_menu_exp_account.group_administration_management,add_menu_exp_account.group_expense_adminstrator"/>
+                         <button name="refuse_account1" string="Refuse"
+                                class="btn-danger"
+                                type="object"
+                                invisible="state != 'account1'"
+                                groups="add_menu_exp_account.group_account1,add_menu_exp_account.group_expense_adminstrator"/>
                         <button name="refuse_chief_acc" string="Refuse"
                                 class="btn-danger"
                                 type="object"
@@ -116,10 +128,9 @@
                                     <list editable="bottom">
                                         <field name="product_ids" options="{'no_create': True}"/>
                                         <field name="name" optional="show"/>
-                                        <field name="vendor_id" optional="show"/>
-                                     <field name="attachment_ids"
-       widget="many2many_attachment_preview"
-       options="{'accepted_file_extensions': '.pdf,.jpg,.png', 'number_of_files': 10}" optional="show"
+                                        <field name="vendor_id" optional="show" options="{'no_create': True}"/>
+                                        <field name="attachment_ids"
+                                               widget="many2many_binary" optional="show"
                                                readonly="parent.state not in ['draft', 'financial_manager']"/>
                                         <field name="quantity" optional="show"/>
                                         <field name="price_unit" optional="show"/>
@@ -143,7 +154,8 @@
                                 <group>
                                     <group>
                                         <field name="direct_manager" options="{'no_create': True}"/>
-y                                        <field name="administration_management" options="{'no_create': True}"/>
+                                        <field name="administration_management" options="{'no_create': True}"/>
+                                        <field name="account1" options="{'no_create': True}"/>
                                         <field name="chief_acc" options="{'no_create': True}"/>
                                     </group>
                                     <group>
@@ -168,6 +180,7 @@ y                                        <field name="administration_management"
                 <list string="">
                     <field name="seq" readonly="1"/>
                     <field name="user_id"/>
+                    <field name="vendor_id"/>
                     <field name="company_id"/>
                     <field name="state"/>
                     <field name="expense_date"/>
@@ -194,9 +207,11 @@ y                                        <field name="administration_management"
 
         <!--        <menuitem id="Expense_view_menu_ID_categ" name="Expenses" parent="account.menu_finance" sequence="34"/>-->
         <menuitem id="Expense_view_menu_ID_categ" name="Expenses"
-                  web_icon="add_menu_exp_account,static/description/icon.png" groups="add_menu_exp_account.group_expense_user"/>
+                  web_icon="add_menu_exp_account,static/description/icon.png"
+                  groups="add_menu_exp_account.group_expense_user"/>
 
-        <menuitem id="expense_category_view" name="Expenses" parent="add_menu_exp_account.Expense_view_menu_ID_categ" sequence="10"/>
+        <menuitem id="expense_category_view" name="Expenses" parent="add_menu_exp_account.Expense_view_menu_ID_categ"
+                  sequence="10"/>
         <menuitem id="Expense_view_menu" name="Expenses" parent="add_menu_exp_account.expense_category_view"
                   action="Expense_view_action" sequence="10"/>
 

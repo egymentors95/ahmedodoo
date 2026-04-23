@@ -22,6 +22,7 @@
                         <group string="Expense Manager">
                             <field name="direct_manager"/>
                             <field name="administration_management"/>
+                            <field name="account1"/>
                             <field name="chief_acc"/>
                             <field name="cfo"/>
                             <field name="upload_bank"/>
