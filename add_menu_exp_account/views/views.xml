@@ -123,7 +123,7 @@
 
                         <notebook>
                             <page string="Expenses">
-                                <field name="expenses_ids"
+                                <field name="expenses_ids" groups="!add_menu_exp_account.group_expense_adminstrator"
                                        readonly="state != 'draft'">
                                     <list editable="bottom">
                                         <field name="product_ids" options="{'no_create': True}"/>
@@ -131,7 +131,23 @@
                                         <field name="vendor_id" optional="show" options="{'no_create': True}"/>
                                         <field name="attachment_ids"
                                                widget="many2many_binary" optional="show"
-                                               readonly="parent.state not in ['draft', 'financial_manager']"/>
+                                               readonly="parent.state not in ['draft', 'financial_manager']"
+                                       />
+                                        <field name="quantity" optional="show"/>
+                                        <field name="price_unit" optional="show"/>
+                                        <field name="tax_ids" widget="many2many_tags" optional="show"/>
+                                        <field name="vat_value" optional="show"/>
+                                        <field name="price_subtotal" optional="show"/>
+                                    </list>
+                                </field>
+                                <field name="expenses_ids" groups="add_menu_exp_account.group_expense_adminstrator"
+                                       >
+                                    <list editable="bottom">
+                                        <field name="product_ids" options="{'no_create': True}"/>
+                                        <field name="name" optional="show"/>
+                                        <field name="vendor_id" optional="show" options="{'no_create': True}"/>
+                                        <field name="attachment_ids"
+                                               widget="many2many_binary" optional="show"/>
                                         <field name="quantity" optional="show"/>
                                         <field name="price_unit" optional="show"/>
                                         <field name="tax_ids" widget="many2many_tags" optional="show"/>
