@@ -24,14 +24,14 @@
                                 class="oe_highlight"
                                 type="object"
                                 invisible="state != 'administration_management'"
-                                groups="add_menu_exp_account.group_account1,add_menu_exp_account.group_expense_adminstrator"/>
+                                groups="add_menu_exp_account.group_administration_management,add_menu_exp_account.group_expense_adminstrator"/>
 
 
                         <button name="to_chief_acc" string="To Chief Accountant"
                                 class="oe_highlight"
                                 type="object"
                                 invisible="state != 'account1'"
-                                groups="add_menu_exp_account.group_administration_management,add_menu_exp_account.group_expense_adminstrator"/>
+                                groups="add_menu_exp_account.group_account1,add_menu_exp_account.group_expense_adminstrator"/>
 
                         <button name="to_cfo" string="To CFO"
                                 class="oe_highlight"
