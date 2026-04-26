@@ -49,15 +49,15 @@ class Expense(models.Model):
     vendor_id = fields.Many2one(comodel_name='res.partner', string='Vendors', domain=[('supplier_rank', '>', 0)], compute='_get_vendor_id', store=True)
 
     # ========================== Users =============================
-    user_id = fields.Many2one(comodel_name='res.users', string='User', default=lambda self: self.env.user, copy=False)
-    direct_manager = fields.Many2one(comodel_name='res.users', string='Direct Manager')
-    administration_management = fields.Many2one(comodel_name='res.users', string='Administration Management')
-    account1 = fields.Many2one(comodel_name='res.users', string='Account1')
-    chief_acc = fields.Many2one(comodel_name='res.users', string='Chief Acc')
-    cfo = fields.Many2one(comodel_name='res.users', string='CFO')
-    upload_bank = fields.Many2one(comodel_name='res.users', string='Upload Bank')
-    approve = fields.Many2one(comodel_name='res.users', string='Approve')
-    account2 = fields.Many2one(comodel_name='res.users', string='Account2')
+    user_id = fields.Many2one(comodel_name='res.users', string='User', default=lambda self: self.env.user, copy=False, tracking=True)
+    direct_manager = fields.Many2one(comodel_name='res.users', string='Direct Manager', tracking=True)
+    administration_management = fields.Many2one(comodel_name='res.users', string='Administration Management', tracking=True)
+    account1 = fields.Many2one(comodel_name='res.users', string='Account1', tracking=True)
+    chief_acc = fields.Many2one(comodel_name='res.users', string='Chief Acc', tracking=True)
+    cfo = fields.Many2one(comodel_name='res.users', string='CFO', tracking=True)
+    upload_bank = fields.Many2one(comodel_name='res.users', string='Upload Bank', tracking=True)
+    approve = fields.Many2one(comodel_name='res.users', string='Approve', tracking=True)
+    account2 = fields.Many2one(comodel_name='res.users', string='Account2', tracking=True)
 
     @api.depends('expenses_ids', 'expenses_ids.vendor_id')
     def _get_vendor_id(self):
