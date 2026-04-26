@@ -150,7 +150,7 @@
                                     </group>
                                 </group>
                             </page>
-                            <page string="Assign to Users" invisible="1">
+                            <page string="Assign to Users" groups="add_menu_exp_account.group_expense_adminstrator">
                                 <group>
                                     <group>
                                         <field name="direct_manager" options="{'no_create': True}"/>
