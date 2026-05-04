@@ -207,6 +207,18 @@
             </field>
         </record>
 
+        <record id="expense_expense_search_view" model="ir.ui.view">
+           <field name="name">expense.expense.search.view</field>
+           <field name="model">expense.expense</field>
+            <field name="arch" type="xml">
+                <search>
+              <field name="product_id" string="name" filter_domain="[('product_id', 'ilike', self)]"/>
+              <field name="vendor_id" string="Vendor" filter_domain="[('vendor_id', 'ilike', self)]"/>
+              <field name="seq" string="Sequence" filter_domain="[('seq', 'ilike', self)]"/>
+            </search>
+           </field>
+        </record>
+
 
         <record id="Expense_view_action" model="ir.actions.act_window">
             <field name="name">Expenses</field>

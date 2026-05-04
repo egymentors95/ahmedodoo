@@ -47,6 +47,7 @@ class Expense(models.Model):
     company_id = fields.Many2one(comodel_name='res.company', string='Company', default=lambda self: self.env.company)
     department_id = fields.Many2one(comodel_name='user.department', compute='_get_department', store=True)
     vendor_id = fields.Many2one(comodel_name='res.partner', string='Vendors', domain=[('supplier_rank', '>', 0)], compute='_get_vendor_id', store=True)
+    product_id = fields.Many2one(comodel_name='product.product', string='Products', store=True, compute='_get_product_id')
 
     # ========================== Users =============================
     user_id = fields.Many2one(comodel_name='res.users', string='User', default=lambda self: self.env.user, copy=False, tracking=True)
@@ -63,6 +64,11 @@ class Expense(models.Model):
     def _get_vendor_id(self):
         for rec in self:
             rec.vendor_id = next((l.vendor_id for l in rec.expenses_ids if l.vendor_id), False)
+
+    @api.depends('expenses_ids', 'expenses_ids.product_ids')
+    def _get_product_id(self):
+        for rec in self:
+            rec.product_id = next((l.product_ids for l in rec.expenses_ids if l.product_ids), False)
 
 
     def _fix_workflow_users(self):
