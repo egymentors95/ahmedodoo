@@ -16,9 +16,17 @@ class ResUser(models.Model):
     account2 = fields.Many2one(comodel_name='res.users', string='Account2')
 
     # Managers Financial Expenses
-    financial_chief_acc = fields.Many2one(comodel_name='res.users', string='Chief Acc')
-    financial_cfo = fields.Many2one(comodel_name='res.users', string='CFO')
-    financial_upload_bank = fields.Many2one(comodel_name='res.users', string='Upload Bank')
-    financial_approve = fields.Many2one(comodel_name='res.users', string='Approve')
+    financial_chief_acc = fields.Many2one(comodel_name='res.users', string='Direct Manager')
+    financial_cfo = fields.Many2one(comodel_name='res.users', string='Admin Manager')
+    # financial_upload_bank = fields.Many2one(comodel_name='res.users', string='Upload Bank')
+    # financial_approve = fields.Many2one(comodel_name='res.users', string='Approve')
     financial_account2 = fields.Many2one(comodel_name='res.users', string='Accounts')
 
+    # Users
+    exp_users_ids = fields.Many2many(
+        comodel_name='res.users',
+        relation='exp_users_rel',
+        column1='user_id',
+        column2='exp_user_id',
+        string='Users'
+    )

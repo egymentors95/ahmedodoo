@@ -23,10 +23,10 @@ class FinancialExpense(models.Model):
     state = fields.Selection(selection=
     [
         ('draft', 'creator'),
-        ('chief_acc', 'Chief Acc'),
-        ('cfo', 'CFO'),
-        ('upload_bank', 'Upload Bank'),
-        ('approve', 'Approve'),
+        ('chief_acc', 'Direct Manager'),
+        ('cfo', 'Admin Manager'),
+        # ('upload_bank', 'Upload Bank'),
+        # ('approve', 'Approve'),
         ('account2', 'Accounts'),
 
     ], required=False, default='draft', tracking=True)
@@ -38,8 +38,8 @@ class FinancialExpense(models.Model):
     user_id = fields.Many2one(comodel_name='res.users', string='User', default=lambda self: self.env.user, copy=False)
     chief_acc = fields.Many2one(comodel_name='res.users', string='Chief Acc')
     cfo = fields.Many2one(comodel_name='res.users', string='CFO')
-    upload_bank = fields.Many2one(comodel_name='res.users', string='Upload Bank')
-    approve = fields.Many2one(comodel_name='res.users', string='Approve')
+    # upload_bank = fields.Many2one(comodel_name='res.users', string='Upload Bank')
+    # approve = fields.Many2one(comodel_name='res.users', string='Approve')
     account2 = fields.Many2one(comodel_name='res.users', string='Accounts')
 
     def _fix_workflow_users(self):
@@ -49,14 +49,14 @@ class FinancialExpense(models.Model):
             if user:
                 rec.chief_acc = user.financial_chief_acc.id if user.financial_chief_acc else False
                 rec.cfo = user.financial_cfo.id if user.financial_cfo else False
-                rec.upload_bank = user.financial_upload_bank.id if user.financial_upload_bank else False
-                rec.approve = user.financial_approve.id if user.financial_approve else False
+                # rec.upload_bank = user.financial_upload_bank.id if user.financial_upload_bank else False
+                # rec.approve = user.financial_approve.id if user.financial_approve else False
                 rec.account2 = user.financial_account2.id if user.financial_account2 else False
             else:
                 rec.chief_acc = False
                 rec.cfo = False
-                rec.upload_bank = False
-                rec.approve = False
+                # rec.upload_bank = False
+                # rec.approve = False
                 rec.account2 = False
 
 
@@ -75,8 +75,8 @@ class FinancialExpense(models.Model):
         return {
             'chief_acc': self.chief_acc,
             'cfo': self.cfo,
-            'upload_bank': self.upload_bank,
-            'approve': self.approve,
+            # 'upload_bank': self.upload_bank,
+            # 'approve': self.approve,
             'account2': self.account2,
         }.get(self.state)
 
@@ -103,13 +103,13 @@ class FinancialExpense(models.Model):
                 if rec.cfo != user:
                     raise AccessError("Only CFO can edit")
 
-            elif rec.state == 'upload_bank':
-                if rec.upload_bank != user:
-                    raise AccessError("Only Upload Bank can edit")
-
-            elif rec.state == 'approve':
-                if rec.approve != user:
-                    raise AccessError("Only Approve can edit")
+            # elif rec.state == 'upload_bank':
+            #     if rec.upload_bank != user:
+            #         raise AccessError("Only Upload Bank can edit")
+            #
+            # elif rec.state == 'approve':
+            #     if rec.approve != user:
+            #         raise AccessError("Only Approve can edit")
 
             elif rec.state == 'account2':
                 if rec.account2 != user:
@@ -186,15 +186,15 @@ class FinancialExpense(models.Model):
             rec.state = 'cfo'
             rec._send_stage_email()
 
-    def to_upload_bank(self):
-        for rec in self:
-            rec.state = 'upload_bank'
-            rec._send_stage_email()
-
-    def to_approve(self):
-        for rec in self:
-            rec.state = 'approve'
-            rec._send_stage_email()
+    # def to_upload_bank(self):
+    #     for rec in self:
+    #         rec.state = 'upload_bank'
+    #         rec._send_stage_email()
+    #
+    # def to_approve(self):
+    #     for rec in self:
+    #         rec.state = 'approve'
+    #         rec._send_stage_email()
 
     def to_account2(self):
         for rec in self:
@@ -218,22 +218,22 @@ class FinancialExpense(models.Model):
                 rec.state = 'chief_acc'
                 rec._send_refuse_email()
 
-    def refuse_upload_bank(self):
-        for rec in self:
-            if rec.state == 'upload_bank':
-                rec.state = 'cfo'
-                rec._send_refuse_email()
-
-    def refuse_approve(self):
-        for rec in self:
-            if rec.state == 'approve':
-                rec.state = 'upload_bank'
-                rec._send_refuse_email()
+    # def refuse_upload_bank(self):
+    #     for rec in self:
+    #         if rec.state == 'upload_bank':
+    #             rec.state = 'cfo'
+    #             rec._send_refuse_email()
+    #
+    # def refuse_approve(self):
+    #     for rec in self:
+    #         if rec.state == 'approve':
+    #             rec.state = 'upload_bank'
+    #             rec._send_refuse_email()
 
     def refuse_account(self):
         for rec in self:
             if rec.state == 'account2':
-                rec.state = 'approve'
+                rec.state = 'cfo'
                 rec._send_refuse_email()
 
     @api.depends(

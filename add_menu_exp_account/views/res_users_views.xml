@@ -32,12 +32,13 @@
                         <group string="Financial Expense Manager">
                             <field name="financial_chief_acc"/>
                             <field name="financial_cfo"/>
-                            <field name="financial_upload_bank"/>
-                            <field name="financial_approve"/>
+<!--                            <field name="financial_upload_bank"/>-->
+<!--                            <field name="financial_approve"/>-->
                             <field name="financial_account2"/>
-
-
                         </group>
+                    </group>
+                    <group string="Users">
+                        <field name="exp_users_ids" widget="many2many_tags"/>
                     </group>
                 </page>
             </xpath>

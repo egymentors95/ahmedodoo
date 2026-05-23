@@ -221,7 +221,7 @@
 
 
         <record id="Expense_view_action" model="ir.actions.act_window">
-            <field name="name">Expenses</field>
+            <field name="name">Payments</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">expense.expense</field>
             <field name="view_mode">list,form</field>

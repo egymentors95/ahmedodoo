@@ -18,22 +18,22 @@
                                 type="object"
                                 invisible="state != 'chief_acc'"
                                 groups="add_menu_exp_account.group_financial_chief_acc,add_menu_exp_account.group_financial_expense_admin"/>
-                        <button name="to_upload_bank" string="To Cash Management"
+<!--                        <button name="to_upload_bank" string="To Cash Management"-->
+<!--                                class="oe_highlight"-->
+<!--                                type="object"-->
+<!--                                invisible="state != 'cfo'"-->
+<!--                                groups="add_menu_exp_account.group_financial_cfo,add_menu_exp_account.group_financial_expense_admin"/>-->
+<!--                        <button name="to_approve" string="To Cash Management"-->
+<!--                                class="oe_highlight"-->
+<!--                                type="object"-->
+<!--                                invisible="state != 'upload_bank'"-->
+<!--                                groups="add_menu_exp_account.group_financial_upload_bank,add_menu_exp_account.group_financial_expense_admin"/>-->
+
+                        <button name="to_account2" string="To Accounts"
                                 class="oe_highlight"
                                 type="object"
                                 invisible="state != 'cfo'"
                                 groups="add_menu_exp_account.group_financial_cfo,add_menu_exp_account.group_financial_expense_admin"/>
-                        <button name="to_approve" string="To Cash Management"
-                                class="oe_highlight"
-                                type="object"
-                                invisible="state != 'upload_bank'"
-                                groups="add_menu_exp_account.group_financial_upload_bank,add_menu_exp_account.group_financial_expense_admin"/>
-
-                        <button name="to_account2" string="To Account 2"
-                                class="oe_highlight"
-                                type="object"
-                                invisible="state != 'approve'"
-                                groups="add_menu_exp_account.group_financial_approve,add_menu_exp_account.group_financial_expense_admin"/>
                         <!--                             Refuse                                -->
                         <button name="refuse_chief_acc" string="Refuse"
                                 class="btn-danger"
@@ -45,16 +45,16 @@
                                 type="object"
                                 invisible="state != 'cfo'"
                                 groups="add_menu_exp_account.group_financial_cfo,add_menu_exp_account.group_financial_expense_admin"/>
-                        <button name="refuse_upload_bank" string="Refuse"
-                                class="btn-danger"
-                                type="object"
-                                invisible="state != 'upload_bank'"
-                                groups="add_menu_exp_account.group_financial_upload_bank,add_menu_exp_account.group_financial_expense_admin"/>
-                        <button name="refuse_approve" string="Refuse"
-                                class="btn-danger"
-                                type="object"
-                                invisible="state != 'approve'"
-                                groups="add_menu_exp_account.group_financial_approve,add_menu_exp_account.group_financial_expense_admin"/>
+<!--                        <button name="refuse_upload_bank" string="Refuse"-->
+<!--                                class="btn-danger"-->
+<!--                                type="object"-->
+<!--                                invisible="state != 'upload_bank'"-->
+<!--                                groups="add_menu_exp_account.group_financial_upload_bank,add_menu_exp_account.group_financial_expense_admin"/>-->
+<!--                        <button name="refuse_approve" string="Refuse"-->
+<!--                                class="btn-danger"-->
+<!--                                type="object"-->
+<!--                                invisible="state != 'approve'"-->
+<!--                                groups="add_menu_exp_account.group_financial_approve,add_menu_exp_account.group_financial_expense_admin"/>-->
                         <button name="refuse_account" string="Refuse"
                                 class="btn-danger"
                                 type="object"
@@ -118,11 +118,12 @@
                                     <group>
                                         <field name="chief_acc" options="{'no_create': True}"/>
                                         <field name="cfo" options="{'no_create': True}"/>
+                                                                                <field name="account2" options="{'no_create': True}"/>
+
                                     </group>
                                     <group>
-                                        <field name="upload_bank" options="{'no_create': True}"/>
-                                        <field name="approve" options="{'no_create': True}"/>
-                                        <field name="account2" options="{'no_create': True}"/>
+<!--                                        <field name="upload_bank" options="{'no_create': True}"/>-->
+<!--                                        <field name="approve" options="{'no_create': True}"/>-->
                                     </group>
                                 </group>
                             </page>
@@ -153,7 +154,7 @@
 
 
         <record id="financial_expense_view_action" model="ir.actions.act_window">
-            <field name="name">Financial Expenses</field>
+            <field name="name">Expenses</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">financial.expense</field>
             <field name="view_mode">list,form</field>
