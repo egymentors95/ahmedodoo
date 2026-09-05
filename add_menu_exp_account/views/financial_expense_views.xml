@@ -7,7 +7,7 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="to_chief_acc" string="To Chief Accountant"
+                        <button name="to_chief_acc" string="To Direct Manager"
                                 class="oe_highlight"
                                 type="object"
                                 invisible="state != 'draft'"
